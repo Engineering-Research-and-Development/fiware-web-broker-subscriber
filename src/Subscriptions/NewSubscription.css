@@ -2,23 +2,6 @@
 This is a stateful component, with 4 stages. Stage is shared, possibility to reverse.
 Each input field is stored in state
 */
-.newSubPage{
-    display: flex;
-    flex-flow: column;
-}
-
-
-
-/*PAGE1: Selection from entity -> Box to Box, drag n drop*/
-.newSubPage1{
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
-    align-items: flex-start;
-    height: auto;
-}
-
-
 
 /*PAGE2: Entity click selection, exploding attrs, setting conditions and subs (horizontal boxes, d&d) + conditions expressions*/
 .newSubPage2{

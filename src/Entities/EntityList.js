@@ -27,3 +27,21 @@ export default class EntityList extends React.Component{
         )
     }
 }
+
+export class EntityListHeader extends React.Component{
+    constructor(props){
+        super(props)
+        /** Props:
+         * title
+         */
+    }
+
+    render(){
+        return(
+            <div>
+                <h2>{this.props.title}</h2>
+            </div>
+            
+        )
+    }
+}
