@@ -1,0 +1,81 @@
+/*Pages Explaination
+This is a stateful component, with 4 stages. Stage is shared, possibility to reverse.
+Each input field is stored in state
+*/
+.newSubPage{
+    display: flex;
+    flex-flow: column;
+}
+
+
+
+/*PAGE1: Selection from entity -> Box to Box, drag n drop*/
+.newSubPage1{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    height: auto;
+}
+
+
+/*PAGE2: Entity click selection, exploding attrs, setting conditions and subs (horizontal boxes, d&d) + conditions expressions*/
+.newSubPage2{
+    display: flex;
+    flex-flow: column wrap;
+}
+
+/*PAGE3: Ultimation Page: One main box. Form to complete, extra subscription info
+*/
+.newSubPage3{
+    display: flex;
+}
+
+/*PAGE4: Payload checking and "on-the-fly" modifications*/
+.newSubPage4{
+    display: flex;
+}
+
+
+.newSubFooter{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
+    padding-block: 10px;
+    border-top: 2px solid rgb(13, 54, 67);
+/*     box-shadow: inset  rgb(13, 54, 67);*/    
+    background-color: rgb(38, 151, 189);
+    height: 8vh;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.newSubFooter .activebtn{
+    transition-duration: 0.4s;
+    border-radius: 6px;
+    border: 2px solid rgb(13, 54, 67);
+    background-color: rgb(29, 117, 147);
+    color: white;
+    cursor:pointer;
+    margin: auto;
+    
+}
+
+.newSubFooter .disabledbtn{
+    border-radius: 6px;
+    border: 2px solid rgb(180, 180, 180);
+    background-color: rgb(139, 139, 139);
+    color: white;
+    cursor:pointer;
+    margin: auto;
+}
+
+.newSubFooter .activebtn:hover{
+background-color: rgb(23, 164, 211);
+}
+.newSubFooter .activebtn:active{
+transition-duration: 0.1s;
+background-color: rgb(20, 77, 96);
+}

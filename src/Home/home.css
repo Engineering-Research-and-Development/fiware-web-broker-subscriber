@@ -1,0 +1,105 @@
+.listService{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    height: fit-content;
+    justify-content: center;
+    border: solid 2px grey;
+    border-collapse: collapse;
+    background-color: rgba(44, 190, 239, 0.459);
+    margin-top: 30px;
+}
+
+.listService thead {
+    padding-right: 10px;
+    box-shadow: inset 0 0 5px rgb(16, 87, 110);
+    background-color: rgb(29, 117, 147);
+    flex-wrap: wrap;
+} 
+
+.listService tbody {
+    display: flex;
+    flex-direction: column;
+    box-sizing: content-box;
+    width: auto;
+    height: fit-content;
+    max-height: 200px;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+}
+
+
+.listService tr {
+    display: flex;
+    flex-direction: row;
+    box-sizing: content-box;
+    width: auto;
+
+}
+
+.listService tr:nth-child(even){
+    background-color:  rgba(41, 174, 218, 0.459);
+}
+
+.listService tr:hover{
+    background-color:  rgb(41, 173, 218);
+    
+}
+
+.listService th{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+    width: 33%;
+    color: white;
+    background-color: rgb(29, 117, 147);
+    border: solid 1px rgba(160, 160, 160, 0.564);
+    padding: 10px;
+    
+}
+
+.listService td{
+    display: flex;
+    justify-content: center;
+    border: solid 1px rgba(160, 160, 160, 0.564);
+    align-items: center;
+    overflow: hidden; 
+    width: 33%;
+    padding: 10px
+}
+
+.listService td:hover{
+    background-color:  rgba(24, 99, 124, 0.459);
+}
+
+.buttons{
+    cursor: pointer;
+}
+
+h5{
+    margin: 0px ;
+    padding: 0px;
+}
+
+.serviceBody{
+    display: flex;
+    flex-flow: row wrap;
+    margin: auto;
+    justify-content: space-evenly;
+}
+
+.stats{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.stasRow{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-around;
+}

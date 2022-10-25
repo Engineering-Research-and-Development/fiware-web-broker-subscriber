@@ -1,0 +1,51 @@
+.urlForm{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border : 2px solid  black;
+    border-radius: 6px;
+    background-color: rgb(195, 215, 242);
+    width: 30%;
+    height: auto;
+    margin: 1px;
+}
+
+.urlFields{
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-items: auto;
+    width: auto;
+    margin-top: 10px;
+    border: 0px outset black;
+    border-radius: 6px;
+    background-color: white;
+}
+
+.btnFields{
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.inputAreas{
+    border: 0px solid white;
+    background: white;
+    border-left: 1px solid black;
+    padding: auto;
+    margin: 2px;
+    box-shadow: none;
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+.inputAreas:hover{
+    transition-duration: 0.2s;
+    box-shadow: rgb(222, 222, 222);
+    -webkit-box-shadow: 0 0 0 30px rgb(222, 222, 222) inset !important;
+}
+
+
+p{
+    font-family: "Times New Roman", Times, serif;
+    margin: 0px;
+}

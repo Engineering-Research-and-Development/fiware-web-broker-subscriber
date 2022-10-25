@@ -1,0 +1,60 @@
+nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 10vh;
+    background: rgb(29, 117, 147);
+    color: white
+
+}
+
+.navLinks{
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+}
+
+.linkStyle{
+    transition-duration: 0.3s;
+    color: white
+}
+
+.linkStyle:link{text-decoration: none;}
+.linkStyle:visited{text-decoration: none;}
+.linkStyle:hover{
+    transition-duration: 0.3s;
+    text-decoration:underline;
+    color: rgb(225, 31, 31);
+}
+
+.linkStyle.current{
+    color: brown;
+    text-decoration: underline;
+}
+.linkStyle:active { 
+    transition-duration: 0.1s;
+    color: white; 
+}
+
+.disconnectButton{
+    transition-duration: 0.4s;
+    border-radius: 12px;
+    border: 2px solid black;
+    background-color: brown;
+    color: white;
+    float: left;
+    cursor:pointer;
+}
+
+.disconnectButton:hover{
+    background-color: rgb(225, 31, 31);
+}
+.disconnectButton:active{
+    transition-duration: 0.1s;
+    color:white;
+    background-color: rgb(84, 6, 6);
+}
+
+

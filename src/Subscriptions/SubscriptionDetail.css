@@ -1,0 +1,168 @@
+.subDetail{
+    
+    display: flex;
+    flex-direction: column;
+    border: 2px solid rgb(13, 54, 67);
+    box-shadow: inset 0 0 5px rgb(16, 87, 110);
+    border-radius: 6px;
+    border-collapse: collapse;
+    width: max-content;
+    max-height: 70vh;
+    width: 25%;
+    max-width: 40%;
+    margin: 0px;
+    background-color: rgba(44, 190, 239, 0.459);
+}
+
+.subDetail .subInfo{
+    
+    overflow-y: scroll;
+    padding-inline: 5px;
+}
+
+.subInfo h2{
+    margin: 2px;
+    color: rgb(13, 54, 67);
+}
+
+.subInfo h3{
+    margin-block: 10px;
+    color: rgb(16, 87, 110);
+}
+
+.subInfo h4{
+    margin-block: 10px;
+    color: rgb(21, 113, 144);
+}
+
+.subInfo p{
+    margin-block: 3px;
+    color: black;
+}
+
+.subInfo .generalInfo{
+    border-bottom: 2px solid rgb(13, 54, 67);
+    border: 1px solid rgb(13, 54, 67);
+    border-radius: 6px;
+    box-shadow: inset 0 0 5px rgb(16, 87, 110);
+}
+
+.subInfo .entitiesInfo{
+    display: flex;
+    flex-direction: row;
+    
+    overflow-x: scroll;
+    max-width: 100%;
+    border-bottom: 2px solid rgb(13, 54, 67);
+    box-shadow: inset 0 0 5px rgb(16, 87, 110);
+    border: 1px solid rgb(13, 54, 67);
+    border-radius: 6px;
+    padding-inline: 10px;
+}
+
+.subInfo .conditionsInfo{
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-width:  100%;
+    max-height: 200px;
+    margin: 1px;
+    column-gap: 10px;
+    border-bottom: 2px solid rgb(13, 54, 67);
+    box-shadow: inset 0 0 5px rgb(16, 87, 110);
+    border: 1px solid rgb(13, 54, 67);
+    border-radius: 6px;
+}
+
+.subInfo .conditionsInfo .conditionRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    text-align: left;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-collapse: collapse;
+}
+
+.subInfo .conditionsInfo .conditionRow .conditionName{
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    text-justify: center;
+    margin-block: 10px;
+    width: 70%;
+}
+
+.subInfo .conditionsInfo .conditionRow .conditionValue{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 30%;
+}
+
+.subInfo .subAttributesInfo{
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    text-align: center;
+    max-width: 100%;
+    max-height: 200px;
+    margin: 5px;
+    column-gap: 10px;
+    box-shadow: inset 0 0 5px rgb(16, 87, 110);
+    border: 1px solid rgb(13, 54, 67);
+    border-radius: 6px;
+    padding-inline: 5px;
+ 
+
+}
+
+
+.subInfo .conditionsInfo::-webkit-scrollbar{
+    width: 0px 
+}
+
+.subDetail .btnfooter{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-block: 10px;
+    border-top: 2px solid rgb(13, 54, 67);
+    box-shadow: inset  rgb(13, 54, 67);
+}
+
+.deleteBtn{
+    border-radius: 12px;
+    border: 2px solid black;
+    background-color: brown;
+    color: white;
+    cursor:pointer;
+}
+
+.deleteBtn:hover{
+    transition-duration: 0.4s;
+    background-color: rgb(225, 31, 31);
+}
+.deleteBtn:active{
+    transition-duration: 0.1s;
+    background-color: rgb(84, 6, 6);
+}
+
+.modifyBtn{
+    border-radius: 12px;
+    border: 2px solid black;
+    background-color: rgb(29, 117, 147);
+    color: white;
+    cursor:pointer;
+}
+
+.modifyBtn:hover{
+    transition-duration: 0.4s;
+    background-color: rgb(23, 164, 211);
+}
+.modifyBtn:active{
+    transition-duration: 0.1s;
+    background-color: rgb(20, 77, 96);
+}
