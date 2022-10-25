@@ -1,6 +1,6 @@
 import React from "react";
 import "./NewSubscription.css"
-import EntityList from "../Entities/EntityList";
+import NewSub1 from "./NewSubscriptionSteps/NewSub1";
 import { Link } from "react-router-dom";
 
 export default class NewSubscriptionPage extends React.Component{
@@ -23,10 +23,16 @@ export default class NewSubscriptionPage extends React.Component{
 
         this.fetchEntities = this.fetchEntities.bind(this)
         this.renderSwitch = this.renderSwitch.bind(this)
+        this.evaluateNext = this.evaluateNext.bind(this)
+        this.incrementStage = this.incrementStage.bind(this)
+        this.decrementStage = this.decrementStage.bind(this)
     }
 
-    componentDidMount(){
+
+    async componentDidMount(){
         this.fetchEntities()
+        this.evaluateNext()
+        
     }
 
     componentWillUnmount(){
@@ -41,6 +47,44 @@ export default class NewSubscriptionPage extends React.Component{
             subDetails: [],
             payload: {}
         }
+    }
+
+    incrementStage(){
+        const new_stage = this.state.stage ++
+        this.setState({
+            stage : new_stage
+        })
+        this.evaluateNext()
+    }
+
+    decrementStage(){
+        const new_stage = this.state.stage --
+        this.setState({
+            stage : new_stage
+        })
+        this.evaluateNext()
+    }
+
+    evaluateNext(){
+        const stage = this.state.stage
+        switch(stage) {
+            case 1:
+                const entlist = this.state.selectedEnts
+                if (entlist.length < 1) return
+                break
+            case 2:
+                break
+                //Always active
+            case 3:
+                break
+                //Check for some other stuff
+            case 4:
+                break
+                //Logic to evaluate JSON Payload.
+            default:
+                break
+        }
+        this.setState({nextOk : true})
     }
 
     async fetchEntities(){
@@ -92,46 +136,17 @@ export default class NewSubscriptionPage extends React.Component{
         return(
             <div className="newSubPage">
                 {pageBody}
-                <PageFooter stage={this.state.stage} nextOk={this.state.nextOk}/>
+                <PageFooter
+                    stage={this.state.stage}
+                    nextOk={this.state.nextOk}
+                    incrementStage = {this.incrementStage}
+                    decrementStage = {this.decrementStage}
+                />
             </div>
         )
         
         //return(<button onClick={this.openPage}>Click</button>)
     }
-}
-
-
-
-class NewSub1 extends React.Component{
-    constructor(props){
-        super(props)
-        /** Props:
-         * entlist
-         * selectentlist
-         * setList (function) ?
-         * 
-         */
-    }
-
-    render(){
-        const entlist = this.props.entlist
-        const selectentlist = this.props.selectentlist
-
-        return(
-            <div className="newSubPage1">
-                <div>
-                    <EntityListHeader title={"Entities"}/>
-                    <EntityList entlist = {entlist} />
-                </div>
-                <div>
-                <EntityListHeader title={"Subscribed"}/>
-                    <EntityList entlist = {selectentlist} />
-                </div>
-                
-            </div>
-        )
-    }
-
 }
 
 
@@ -146,26 +161,19 @@ class PageFooter extends React.Component{
          * stage
          * nextOk
          */
-        this.state = {
-            nextOk : false
-        }
+        
     }
 
-    /**TODO: Implement logic for button management
-     * Stage 1 -> previous button brings back to Subs
-     * Each stage -> Next button become able only if "page is validated"
-     *      Stage 1 -> At least one entity is set
-     *      Stage 2 -> None
-     *      Stage 3 -> Check some required info to add 
-     *      Stage 4 -> Create JSON payload and make it modifiable. If JSON Parsning, so next
-     * State 4 -> Next button now transforms into "Subscribe and sends the entity."
-     */
 
     render(){
-        const btnNext = <button disabled={ this.state.nextOk? true:false} className={this.state.nextOk? "activebtn": "disabledbtn"}>Next {">"}</button>
-        const btnPrev = <button className="activebtn">{"<"} Previous</button>
+        const btnNext = <button 
+                            disabled={ this.props.nextOk? false:true} 
+                            className={this.props.nextOk? "activebtn": "disabledbtn"} 
+                            onClick={this.props.incrementStage}
+                        > Next {">"}</button>
+        const btnPrev = <button className="activebtn" onClick={this.props.decrementStage}> {"<"} Previous </button>
         const btnGoBack = <Link to="/subscriptions" style={{margin: 'auto'}}> <button className="activebtn">{"<"} Back to list</button></Link>
-        const btnSubscribe = <button disabled={ this.state.nextOk? true:false} className={this.state.nextOk? "activebtn": "disabledbtn"}>{"<"} Previous</button>
+        const btnSubscribe = <button disabled={ this.props.nextOk? false:true} className={this.props.nextOk? "activebtn": "disabledbtn"}>{"<"} Previous</button>
         
         return(
             <div className="newSubFooter">
@@ -177,21 +185,7 @@ class PageFooter extends React.Component{
 }
 
 
-class EntityListHeader extends React.Component{
-    constructor(props){
-        super(props)
-        /** Props:
-         * title
-         */
-    }
 
-    render(){
-        return(
-            <div>
-                <h2>{this.props.title}</h2>
-            </div>
-            
-        )
-    }
-}
+
+
 
