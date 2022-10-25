@@ -60,7 +60,21 @@ export default class SubscriptionList extends React.Component{
         if (!subs){
             return null
         }
-        if (this.props.sublist.length < 1) return <h2>No Content Available for this service</h2>
+        if (this.props.sublist.length < 1) return (
+                <div className="subTable">
+                    <div className="subHeader">
+                        <SubscriptionListSearchBar
+                            search_modes = {search_modes}
+                            search_mode = {search_mode}
+                            searched = {searched}
+                            handleSearchChange = {this.handleSearchChange}
+                            changeService = {this.changeService}
+                        />
+                    </div>
+                    <h2>No Subscriptions Available for this service</h2>
+                </div>
+                
+            )
         return(
             <div className="subTable">
                 <div className="subHeader">
