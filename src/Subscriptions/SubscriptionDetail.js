@@ -46,6 +46,7 @@ export default class SubscriptionDetail extends React.Component{
         })
         
         const listSubAttr = sub.notification.attrs.map((attr) => <h4 key={attr}>{attr}</h4>)
+        const failure_elem = <h4>Last Failure Reason: <p>{sub.notification.lastFailureReason}</p></h4>
 
         return(
             <div className="subDetail">
@@ -58,7 +59,8 @@ export default class SubscriptionDetail extends React.Component{
                         <h4>Times Sent: <p>{sub.notification.timesSent ? sub.notification.timesSent : "0"}</p></h4>
                         <h4>Status: <p>{sub.status ? sub.status : "Unkown"}</p></h4>
                         <h4>URL: <p>{sub.notification.http.url}</p></h4>
-                        <h4>Last Success Code: <p>{sub.notification.lastSuccessCode ? sub.notification.lastSuccessCode : "Unkown"}</p></h4>
+                        <h4>Last HTTP Code: <p>{sub.notification.lastSuccessCode ? sub.notification.lastSuccessCode : "Unkown"}</p></h4>
+                        {sub.notification.lastSuccessCode !== 200 ? failure_elem : null}
                         <h4>Only Changed attrs: <p>{String(sub.notification.onlyChangedAttrs)}</p></h4>
                         <h4>Sub Throttle: <p>{sub.throttling ? sub.throttling : "0"}</p></h4>
                     </div>

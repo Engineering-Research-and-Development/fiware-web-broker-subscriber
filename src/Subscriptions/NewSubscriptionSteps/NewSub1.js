@@ -1,5 +1,5 @@
 import React from "react"
-import EntityList, { EntityListHeader } from "../../Entities/EntityList";
+import EntityList from "../../Entities/EntityList";
 import "./NewSub1.css"
 
 
@@ -10,7 +10,9 @@ export default class NewSub1 extends React.Component{
          * entlist
          * selectentlist
          * setList (function) ?
-         * 
+         * handleDragStart
+         * handleDragEnd
+         * handleDragEnter
          */
     }
 
@@ -18,17 +20,25 @@ export default class NewSub1 extends React.Component{
         const entlist = this.props.entlist
         const selectentlist = this.props.selectentlist
 
+        const data = [
+            {title : "Entities", items: entlist},
+            {title: "Subscribed", items:selectentlist}
+        ]
+
+        const elems = data.map((grp, grpIdx) => 
+            <EntityList 
+                key={grp.title} 
+                entlist = {grp.items} 
+                title={grp.title} 
+                grpIdx={grpIdx}
+                handleDragStart = {this.props.handleDragStart}
+                handleDragEnter = {this.props.handleDragEnter}
+                handleDragEnd = {this.props.handleDragEnd}
+            />)
+
         return(
             <div className="newSubPage1">
-                <div>
-                    <EntityListHeader title={"Entities"}/>
-                    <EntityList entlist = {entlist} />
-                </div>
-                <div>
-                <EntityListHeader title={"Subscribed"}/>
-                    <EntityList entlist = {selectentlist} />
-                </div>
-                
+                {elems}
             </div>
         )
     }

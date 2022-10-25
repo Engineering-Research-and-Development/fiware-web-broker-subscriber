@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./NewSubscription.css"
 import NewSub1 from "./NewSubscriptionSteps/NewSub1";
 import { Link } from "react-router-dom";
@@ -18,7 +18,8 @@ export default class NewSubscriptionPage extends React.Component{
             conditionAttrs: [],
             conditionDetails: [],
             subDetails: [],
-            payload: {}
+            payload: {},
+            elementDragging: {}
         }
 
         this.fetchEntities = this.fetchEntities.bind(this)
@@ -26,41 +27,64 @@ export default class NewSubscriptionPage extends React.Component{
         this.evaluateNext = this.evaluateNext.bind(this)
         this.incrementStage = this.incrementStage.bind(this)
         this.decrementStage = this.decrementStage.bind(this)
+        this.handleDragStart = this.handleDragStart.bind(this)
+        this.handleDragEnter = this.handleDragEnter.bind(this)
+        this.handleDragEnd = this.handleDragEnd.bind(this)
     }
 
+    
+    handleDragStart(e, params) {
+        //console.log('Drag Starting', params)
+        //console.log(e.target)
+        this.setState({elementDragging:params})
+    }
 
-    async componentDidMount(){
-        this.fetchEntities()
+    handleDragEnter(e, params){
+        const dragging = this.state.elementDragging
+        //console.log(params)
+        if (dragging != params){
+            console.log("Dragging", dragging, "over", params)
+        }
+
+        let newList = []
+        let name = ""
+        if (params.grpIdx == 0){
+            newList = [... this.state.entlist]
+            name = "entlist"
+        } else if (params.grpIdx == 1){
+            newList = [... this.state.selectedEnts]
+            name = "selectedEnts"
+        }
+        newList.splice(params.entIdx, 0, newList.splice(dragging.entIdx, 1)[0])
+        //console.log(params.entIdx, dragging.entIdx)
+        //console.log(newList.splice(params.endIdx, 0, newList.splice(dragging.entIdx, 1)[0]))
+        this.setState((prevState) => (
+            {
+                [name] : newList,
+                elementDragging : params,
+                ...prevState.items
+            }
+        ))
+      
+    }
+
+    handleDragEnd(e, params){
+        this.setState({elementDragging:{}})
+    }
+
+    async incrementStage(){
+        const stage = this.state.stage
+        await this.setState({
+            stage : stage +1 
+        })
         this.evaluateNext()
         
     }
 
-    componentWillUnmount(){
-        this.state = {
-            stage : 1,
-            nextOk: false,
-            entlist : [],
-            selectedEnts : [],
-            selectedAttrs: [],
-            conditionAttrs: [],
-            conditionDetails: [],
-            subDetails: [],
-            payload: {}
-        }
-    }
-
-    incrementStage(){
-        const new_stage = this.state.stage ++
-        this.setState({
-            stage : new_stage
-        })
-        this.evaluateNext()
-    }
-
-    decrementStage(){
-        const new_stage = this.state.stage --
-        this.setState({
-            stage : new_stage
+    async decrementStage(){
+        const stage = this.state.stage
+        await this.setState({
+            stage : stage - 1
         })
         this.evaluateNext()
     }
@@ -112,6 +136,9 @@ export default class NewSubscriptionPage extends React.Component{
                 return <NewSub1 
                             entlist = {this.state.entlist}
                             selectedEnts = {this.state.selectedEnts}
+                            handleDragStart = {this.handleDragStart}
+                            handleDragEnter = {this.handleDragEnter}
+                            handleDragEnd = {this.handleDragEnd}
                         />;
             case 2:
                 return <NewSub1 />;
@@ -124,6 +151,26 @@ export default class NewSubscriptionPage extends React.Component{
                 return null;
         }
       }
+
+      async componentDidMount(){
+        this.fetchEntities()
+        this.evaluateNext()
+
+    }
+
+    componentWillUnmount(){
+        this.state = {
+            stage : 1,
+            nextOk: false,
+            entlist : [],
+            selectedEnts : [],
+            selectedAttrs: [],
+            conditionAttrs: [],
+            conditionDetails: [],
+            subDetails: [],
+            payload: {}
+        }
+    }
 
     render(){
         const entlist = this.state.entlist
@@ -173,7 +220,7 @@ class PageFooter extends React.Component{
                         > Next {">"}</button>
         const btnPrev = <button className="activebtn" onClick={this.props.decrementStage}> {"<"} Previous </button>
         const btnGoBack = <Link to="/subscriptions" style={{margin: 'auto'}}> <button className="activebtn">{"<"} Back to list</button></Link>
-        const btnSubscribe = <button disabled={ this.props.nextOk? false:true} className={this.props.nextOk? "activebtn": "disabledbtn"}>{"<"} Previous</button>
+        const btnSubscribe = <button disabled={ this.props.nextOk? false:true} className={this.props.nextOk? "activebtn": "disabledbtn"}>Subscribe</button>
         
         return(
             <div className="newSubFooter">
