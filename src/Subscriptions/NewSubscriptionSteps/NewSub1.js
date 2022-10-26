@@ -8,7 +8,7 @@ export default class NewSub1 extends React.Component{
         super(props)
         /** Props:
          * entlist
-         * selectentlist
+         * selectedEnts
          * setList (function) ?
          * handleDragStart
          * handleDragEnd
@@ -18,7 +18,7 @@ export default class NewSub1 extends React.Component{
 
     render(){
         const entlist = this.props.entlist
-        const selectentlist = this.props.selectentlist
+        const selectentlist = this.props.selectedEnts
 
         const data = [
             {title : "Entities", items: entlist},

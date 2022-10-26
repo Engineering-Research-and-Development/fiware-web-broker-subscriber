@@ -28,7 +28,7 @@ export default class NewSubscriptionPage extends React.Component{
         this.incrementStage = this.incrementStage.bind(this)
         this.decrementStage = this.decrementStage.bind(this)
         this.handleDragStart = this.handleDragStart.bind(this)
-        this.handleDragEnter = this.handleDragEnter.bind(this)
+        this.handleDragEnterEnts = this.handleDragEnterEnts.bind(this)
         this.handleDragEnd = this.handleDragEnd.bind(this)
     }
 
@@ -39,32 +39,47 @@ export default class NewSubscriptionPage extends React.Component{
         this.setState({elementDragging:params})
     }
 
-    handleDragEnter(e, params){
+    async handleDragEnterEnts(e, params){
         const dragging = this.state.elementDragging
         //console.log(params)
-        if (dragging != params){
-            console.log("Dragging", dragging, "over", params)
-        }
+        
 
         let newList = []
-        let name = ""
+        let newName = ""
+        let oldList = []
+        let oldName = ""
+
         if (params.grpIdx == 0){
             newList = [... this.state.entlist]
-            name = "entlist"
+            newName = "entlist"
+            if (dragging.grpIdx == 0){
+                oldList = newList
+                oldName = newName
+            } else if (dragging.grpIdx == 1){
+                oldList = [... this.state.selectedEnts]
+                oldName = "selectedEnts"
+            } 
         } else if (params.grpIdx == 1){
             newList = [... this.state.selectedEnts]
-            name = "selectedEnts"
+            newName = "selectedEnts"
+            if (dragging.grpIdx == 0){
+                oldList = [... this.state.entlist]
+                oldName = "entlist"
+            } else if (dragging.grpIdx == 1){
+                oldList = newList
+                oldName = newName
+            } 
         }
-        newList.splice(params.entIdx, 0, newList.splice(dragging.entIdx, 1)[0])
-        //console.log(params.entIdx, dragging.entIdx)
-        //console.log(newList.splice(params.endIdx, 0, newList.splice(dragging.entIdx, 1)[0]))
-        this.setState((prevState) => (
+        /* if (!this.state[newName].includes(this.state[oldName][dragging.entIdx])){} */
+        newList.splice(params.entIdx, 0, oldList.splice(dragging.entIdx, 1)[0])
+        
+        await this.setState(
             {
-                [name] : newList,
+                [newName] : newList,
+                [oldName] : oldList,
                 elementDragging : params,
-                ...prevState.items
             }
-        ))
+        )
       
     }
 
@@ -137,7 +152,7 @@ export default class NewSubscriptionPage extends React.Component{
                             entlist = {this.state.entlist}
                             selectedEnts = {this.state.selectedEnts}
                             handleDragStart = {this.handleDragStart}
-                            handleDragEnter = {this.handleDragEnter}
+                            handleDragEnter = {this.handleDragEnterEnts}
                             handleDragEnd = {this.handleDragEnd}
                         />;
             case 2:

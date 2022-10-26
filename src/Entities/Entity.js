@@ -42,7 +42,6 @@ export default class Entity extends React.Component{
 
     render(){
         const ent = this.props.ent
-
         if (!ent) return null
 
         const grpIdx = this.props.grpIdx
@@ -55,6 +54,7 @@ export default class Entity extends React.Component{
                 onDragStart={(e) => this.handleDragStart(e, {grpIdx, entIdx})}
                 onDragEnd={(e) => this.handleDragEnd(e, {grpIdx, entIdx})}
                 onDragEnter={(e) => this.handleDragEnter(e, {grpIdx, entIdx})}
+                
             >
                 <h3>{ent.id}</h3>
                 <h4>{ent.type}</h4>

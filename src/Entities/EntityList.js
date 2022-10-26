@@ -4,32 +4,29 @@ import "./EntityList.css"
 
 export default class EntityList extends React.Component{
     constructor(props){
-        // props: title, data, handleDragStart, handleDragEnd, handleDragEnter
+        // props: key, entlist, title, handleDragStart, handleDragEnd, handleDragEnter
         super(props)
         this.myHandleDragEnter = this.myHandleDragEnter.bind(this)
     }
 
     myHandleDragEnter(e, params){
-        //e.preventDefault()
-        //if (this.state.dragging) return
-        //this.props.handleDragEnter(e, params)
+
+        this.props.handleDragEnter(e, params)
         
     }
     
     render(){
         const grpIdx = this.props.grpIdx
-
-        if (!this.props.entlist) return (
+        if (!this.props.entlist || this.props.entlist.length < 1) return (
             <div>
                 <EntityListHeader title={this.props.title}/>
-                <div className="drag-box" onDragEnter={(e) => this.myHandleDragEnter(e, {grpIdx})}>
-                    {null}
+                <div className="drag-box" onDragEnter={(e) => this.myHandleDragEnter(e, {grpIdx, entIdx: 0})}>
+                    
                 </div>
             </div>
         )
        
         const elems = this.props.entlist.map((ent, entIdx) => 
-                
                 <Entity 
                     key={ent.id} 
                     ent={ent} 
@@ -40,11 +37,10 @@ export default class EntityList extends React.Component{
                     handleDragEnd = {this.props.handleDragEnd}
                 />
             )
-
         return(
             <div>
                 <EntityListHeader title={this.props.title}/>
-                <div className="drag-box" onDragEnter={(e) => this.myHandleDragEnter(e, {grpIdx})}>
+                <div className="drag-box"  >
                     {elems}
                 </div>
             </div>
