@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import "./NewSubscription.css"
 import NewSub1 from "./NewSubscriptionSteps/NewSub1";
 import { Link } from "react-router-dom";
+import NewSub2 from "./NewSubscriptionSteps/NewSub2";
 
 export default class NewSubscriptionPage extends React.Component{
     constructor(props){
@@ -14,6 +15,7 @@ export default class NewSubscriptionPage extends React.Component{
             nextOk: false,
             entlist : [],
             selectedEnts : [],
+            attrlist: [],
             selectedAttrs: [],
             conditionAttrs: [],
             conditionDetails: [],
@@ -30,6 +32,7 @@ export default class NewSubscriptionPage extends React.Component{
         this.handleDragStart = this.handleDragStart.bind(this)
         this.handleDragEnterEnts = this.handleDragEnterEnts.bind(this)
         this.handleDragEnd = this.handleDragEnd.bind(this)
+        this.setAttrList = this.setAttrList.bind(this)
     }
 
     
@@ -42,7 +45,6 @@ export default class NewSubscriptionPage extends React.Component{
     async handleDragEnterEnts(e, params){
         const dragging = this.state.elementDragging
         //console.log(params)
-        
 
         let newList = []
         let newName = ""
@@ -73,18 +75,34 @@ export default class NewSubscriptionPage extends React.Component{
         /* if (!this.state[newName].includes(this.state[oldName][dragging.entIdx])){} */
         newList.splice(params.entIdx, 0, oldList.splice(dragging.entIdx, 1)[0])
         
-        await this.setState(
+        this.setState(
             {
                 [newName] : newList,
-                [oldName] : oldList,
                 elementDragging : params,
+                [oldName] : oldList,
+                
             }
         )
+
+        this.evaluateNext()
       
     }
 
     handleDragEnd(e, params){
         this.setState({elementDragging:{}})
+    }
+
+    setAttrList(){
+        const entlist = this.state.selectedEnts
+        const attrlist = entlist.map((ent) => {
+            const entAttrs = Object.keys(ent).map((key) => {
+                if (key == 'id' || key == 'type') return 
+                const attr = {id: key, type : ent[key].type, value: ent[key].value, uniqueid:ent.id+key}
+                return attr
+            })
+            return entAttrs
+        }).flat(1).filter(elem => elem !== undefined )
+        this.setState({attrlist:attrlist})
     }
 
     async incrementStage(){
@@ -109,7 +127,10 @@ export default class NewSubscriptionPage extends React.Component{
         switch(stage) {
             case 1:
                 const entlist = this.state.selectedEnts
-                if (entlist.length < 1) return
+                if (entlist.length < 1){
+                    this.setState({nextOk : false})
+                    return
+                }
                 break
             case 2:
                 break
@@ -121,7 +142,6 @@ export default class NewSubscriptionPage extends React.Component{
                 break
                 //Logic to evaluate JSON Payload.
             default:
-                break
         }
         this.setState({nextOk : true})
     }
@@ -156,7 +176,14 @@ export default class NewSubscriptionPage extends React.Component{
                             handleDragEnd = {this.handleDragEnd}
                         />;
             case 2:
-                return <NewSub1 />;
+                
+                return <NewSub2
+                            attrlist = {this.state.attrlist}
+                            selectedAttrs = {this.state.selectedAttrs}
+                            conditionAttrs = {this.state.conditionAttrs}
+                            handleDragStart = {this.handleDragStart}
+                            handleDragEnd = {this.handleDragEnd}
+                        />;
             case 3:
                 return <NewSub1 />;
             case 4:
@@ -166,9 +193,16 @@ export default class NewSubscriptionPage extends React.Component{
                 return null;
         }
       }
+    
+    componentDidUpdate(prevProps, prevState){
+        if (this.state.selectedEnts !== prevState.selectedEnts){
+            this.evaluateNext()
+            this.setAttrList()
+        }
+    }
 
-      async componentDidMount(){
-        this.fetchEntities()
+    async componentDidMount(){
+        await this.fetchEntities()
         this.evaluateNext()
 
     }
@@ -225,7 +259,6 @@ class PageFooter extends React.Component{
          */
         
     }
-
 
     render(){
         const btnNext = <button 

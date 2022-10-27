@@ -1,5 +1,6 @@
 import React from "react"
 import EntityList from "../../Entities/EntityList";
+import { ListSearchBar } from "../../Reusable Components/ListSearchBar";
 import "./NewSub1.css"
 
 
@@ -14,10 +15,31 @@ export default class NewSub1 extends React.Component{
          * handleDragEnd
          * handleDragEnter
          */
+        this.state = {
+            searched : "",
+            search_modes : ['Entity Name'],
+            search_mode : 'Entity Name'
+        }
+        this.handleSearchChange = this.handleSearchChange.bind(this)
+        this.filterEntities = this.filterEntities.bind(this)
+    }
+
+    handleSearchChange(e){
+        const name = e.target.name
+        const value = e.target.value
+        this.setState({
+            [name] : value
+        })
+    }
+
+    filterEntities(list){
+        const mode = this.state.search_mode
+
+        if (mode=="Entity Name") return list.filter(item => item.id.includes(this.state.searched))
     }
 
     render(){
-        const entlist = this.props.entlist
+        const entlist = this.filterEntities(this.props.entlist)
         const selectentlist = this.props.selectedEnts
 
         const data = [
@@ -34,10 +56,15 @@ export default class NewSub1 extends React.Component{
                 handleDragStart = {this.props.handleDragStart}
                 handleDragEnter = {this.props.handleDragEnter}
                 handleDragEnd = {this.props.handleDragEnd}
+                searched = {this.state.searched}
+                search_mode = {this.state.search_mode}
+                search_modes = {this.state.search_modes}
+                handleSearchChange = {this.handleSearchChange}
             />)
 
         return(
             <div className="newSubPage1">
+                
                 {elems}
             </div>
         )

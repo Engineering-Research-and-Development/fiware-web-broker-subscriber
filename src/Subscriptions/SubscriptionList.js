@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import ListSearchBarWithButton from "../Reusable Components/ListSearchBar";
 import "./SubscriptionList.css"
 
 export default class SubscriptionList extends React.Component{
@@ -63,7 +63,7 @@ export default class SubscriptionList extends React.Component{
         if (this.props.sublist.length < 1) return (
                 <div className="subTable">
                     <div className="subHeader">
-                        <SubscriptionListSearchBar
+                        <ListSearchBarWithButton
                             search_modes = {search_modes}
                             search_mode = {search_mode}
                             searched = {searched}
@@ -78,7 +78,7 @@ export default class SubscriptionList extends React.Component{
         return(
             <div className="subTable">
                 <div className="subHeader">
-                    <SubscriptionListSearchBar
+                    <ListSearchBarWithButton
                         search_modes = {search_modes}
                         search_mode = {search_mode}
                         searched = {searched}
@@ -132,48 +132,5 @@ class SubBody extends React.Component{
     }
     
     
-}
-
-
-class SubscriptionListSearchBar extends React.Component{
-    /** Props:
-     * sublist
-     * search_modes
-     * search_mode
-     * searched
-     * handleSearchChange
-     * createNew() -> Not sure 
-     */
-    constructor(props){
-        super(props)
-        this.handleInputChange = this.handleInputChange.bind(this)
-    }
-
-    handleInputChange(e){
-        this.props.handleSearchChange(e)
-    }
-
-
-    render(){
-        const searched = this.props.searched
-        const selected = this.props.search_mode
-        const modes = this.props.search_modes
-
-        const listModes = modes.map(mode => <option key={mode} value={mode}>{mode}</option>)
-
-        return(
-            <div className="searchBar">
-                <input className="inputAreas" name="searched" type="text" placeholder={`Insert a ${selected} ...`} value={searched} onChange={this.handleInputChange}/>
-                <select className="inputAreas" name="search_mode" value={selected} onChange={this.handleInputChange}>
-                    {listModes}
-                </select> 
-                <Link className="linkStyle" to="/subscriptions/new"><button className="addBtn">New</button></Link>
-            </div>
-            
-            
-        )
-    }
-
-
 }
 

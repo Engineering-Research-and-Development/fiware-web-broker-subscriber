@@ -1,0 +1,24 @@
+.listHeader{
+    align-self: center;
+    justify-self: center;
+    border: 2px solid rgb(13, 54, 67);
+    box-shadow: inset 0 0 5px rgb(16, 87, 110);
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    background-color: rgb(29, 117, 147);
+    max-height: 80px;
+    max-width: 80vw;
+    border-radius: 6px;
+    margin: auto;
+    margin-top: 30px;
+}
+
+
+.listHeader *{
+    margin: 0;
+}
+
+    
+
+

@@ -1,0 +1,14 @@
+.drag-box-horizontal{
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    width: 80vw;
+    height: 10vh;
+    margin:auto;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    column-gap: 10px;
+    border: 2px solid rgb(13, 54, 67);
+    border-radius: 6px;
+    padding-block: 10px;
+}

@@ -1,0 +1,7 @@
+.newSubPage2{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: space-around;
+    justify-content: flex-start;
+    height: auto;
+}
