@@ -1,27 +1,9 @@
 import React from "react"
 import "./ItemsListHeader.css"
-import { ListSearchBar } from "./ListSearchBar"
-
-export class ItemsListHeader extends React.Component{
-    constructor(props){
-        super(props)
-        /** Props:
-         * title
-         */
-    }
-
-    render(){
-        return(
-            <div className="listHeader">
-                <h2>{this.props.title}</h2>
-            </div>
-            
-        )
-    }
-}
+import ListSearchBar from "./ListSearchBar"
 
 
-export class ItemListHeaderWithSearchBar extends React.Component{
+export class ItemListHeader extends React.Component{
     constructor(props){
         super(props)
         /** Props:
@@ -29,20 +11,26 @@ export class ItemListHeaderWithSearchBar extends React.Component{
          * searched
          * search_mode
          * search_modes
+         * withSearchbar
+         * withSearchbarButton
          * handleSearchChange
          */
     }
 
     render(){
+        const title = this.props.title
+        const searchBar = <ListSearchBar 
+                                searched = {this.props.searched}
+                                search_mode = {this.props.search_mode}
+                                search_modes = {this.props.search_modes}
+                                handleSearchChange = {this.props.handleSearchChange}
+                                withNewButton = {this.props.withSearchbarButton}
+                            />
+
         return(
             <div className="listHeader">
-                <h2>{this.props.title}</h2>
-                <ListSearchBar 
-                    searched = {this.props.searched}
-                    search_mode = {this.props.search_mode}
-                    search_modes = {this.props.search_modes}
-                    handleSearchChange = {this.props.handleSearchChange}
-                />
+                {title? <h2>{this.props.title}</h2> : null}
+                {this.props.withSearchbar ? searchBar : null}
             </div>
             
         )

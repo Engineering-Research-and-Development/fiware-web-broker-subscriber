@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import "./NewSubscription.css"
 import NewSub1 from "./NewSubscriptionSteps/NewSub1";
-import { Link } from "react-router-dom";
+import { Link,  useNavigate} from "react-router-dom";
 import NewSub2 from "./NewSubscriptionSteps/NewSub2";
 
 export default class NewSubscriptionPage extends React.Component{
@@ -21,7 +21,9 @@ export default class NewSubscriptionPage extends React.Component{
             conditionDetails: [],
             subDetails: [],
             payload: {},
-            elementDragging: {}
+            payloadOk : false,
+            elementDragging: {},
+            
         }
 
         this.fetchEntities = this.fetchEntities.bind(this)
@@ -106,12 +108,16 @@ export default class NewSubscriptionPage extends React.Component{
     }
 
     async incrementStage(){
+        //TODO: Search for other navigation feature
+        //window.history.back() // Currently the only working "navigation" trick
+        
         const stage = this.state.stage
         await this.setState({
             stage : stage +1 
         })
         this.evaluateNext()
         
+       
     }
 
     async decrementStage(){
@@ -179,6 +185,7 @@ export default class NewSubscriptionPage extends React.Component{
                 
                 return <NewSub2
                             attrlist = {this.state.attrlist}
+                            selectedEnts = {this.state.selectedEnts}
                             selectedAttrs = {this.state.selectedAttrs}
                             conditionAttrs = {this.state.conditionAttrs}
                             handleDragStart = {this.handleDragStart}
@@ -235,6 +242,7 @@ export default class NewSubscriptionPage extends React.Component{
                 <PageFooter
                     stage={this.state.stage}
                     nextOk={this.state.nextOk}
+                    payloadOk={this.state.payloadOk}
                     incrementStage = {this.incrementStage}
                     decrementStage = {this.decrementStage}
                 />
@@ -256,6 +264,7 @@ class PageFooter extends React.Component{
          * decrementStage (function) -> prev_btn
          * stage
          * nextOk
+         * payloadOk
          */
         
     }
@@ -281,6 +290,9 @@ class PageFooter extends React.Component{
 
 
 
+export function MyNavigator(props){
 
+    useNavigate(props.link)
+    //navigate()
 
-
+}

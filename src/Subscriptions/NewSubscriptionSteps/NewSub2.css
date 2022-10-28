@@ -1,7 +1,27 @@
 .newSubPage2{
     display: flex;
+    flex-flow: row wrap;
+    align-items: space-around;
+    justify-content: flex-start;
+    height: auto;
+    margin-top: 30px;
+}
+
+.newSubPage2 .attrList{
+    display: flex;
     flex-flow: column wrap;
     align-items: space-around;
     justify-content: flex-start;
     height: auto;
+    flex-grow: 1;
+    
+}
+
+.newSubPage2 .entityList{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    height: auto;
+    flex-grow: 1;
 }

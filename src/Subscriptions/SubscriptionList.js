@@ -1,5 +1,5 @@
 import React from "react";
-import ListSearchBarWithButton from "../Reusable Components/ListSearchBar";
+import { ItemListHeader } from "../Reusable Components/ItemsListHeader";
 import "./SubscriptionList.css"
 
 export default class SubscriptionList extends React.Component{
@@ -57,38 +57,23 @@ export default class SubscriptionList extends React.Component{
         const search_modes = this.state.search_modes
         const search_mode = this.state.search_mode
         const searched = this.state.searched
+        //TODO Improve this null
         if (!subs){
             return null
         }
-        if (this.props.sublist.length < 1) return (
-                <div className="subTable">
-                    <div className="subHeader">
-                        <ListSearchBarWithButton
-                            search_modes = {search_modes}
-                            search_mode = {search_mode}
-                            searched = {searched}
-                            handleSearchChange = {this.handleSearchChange}
-                            changeService = {this.changeService}
-                        />
-                    </div>
-                    <h2>No Subscriptions Available for this service</h2>
-                </div>
-                
-            )
+        
         return(
             <div className="subTable">
-                <div className="subHeader">
-                    <ListSearchBarWithButton
-                        search_modes = {search_modes}
-                        search_mode = {search_mode}
-                        searched = {searched}
-                        handleSearchChange = {this.handleSearchChange}
-                        changeService = {this.changeService}
-                    />
-                    
-                </div>
+                <ItemListHeader 
+                    search_mode = {search_mode}
+                    search_modes = {search_modes}
+                    searched = {searched}
+                    handleSearchChange = {this.handleSearchChange}
+                    withSearchbarButton = {"/subscriptions/new"}
+                    withSearchbar = {true}
+                />
                 <div className="subList">
-                    <SubBody subs={subs} handleSubSelection={this.handleBtnClick}/>
+                    {this.props.sublist.length > 1 ? <SubBody subs={subs} handleSubSelection={this.handleBtnClick}/> : <h2>No Subscriptions Available for this service</h2> }
                 </div>
             </div>
         )

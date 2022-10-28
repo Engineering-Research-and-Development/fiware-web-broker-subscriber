@@ -1,4 +1,5 @@
 import React from "react"
+import DragList from "../../DragItems/DragList";
 import EntityList from "../../Entities/EntityList";
 import { ListSearchBar } from "../../Reusable Components/ListSearchBar";
 import "./NewSub1.css"
@@ -17,8 +18,8 @@ export default class NewSub1 extends React.Component{
          */
         this.state = {
             searched : "",
-            search_modes : ['Entity Name'],
-            search_mode : 'Entity Name'
+            search_modes : ['Name', 'Type'],
+            search_mode : 'Name'
         }
         this.handleSearchChange = this.handleSearchChange.bind(this)
         this.filterEntities = this.filterEntities.bind(this)
@@ -35,11 +36,13 @@ export default class NewSub1 extends React.Component{
     filterEntities(list){
         const mode = this.state.search_mode
 
-        if (mode=="Entity Name") return list.filter(item => item.id.includes(this.state.searched))
+        if (mode=="Name") return list.filter(item => item.id.includes(this.state.searched))
+        if (mode=="Type") return list.filter(item => item.type.includes(this.state.searched))
     }
 
     render(){
-        const entlist = this.filterEntities(this.props.entlist)
+        const entlist = this.props.entlist
+        const entlistfiltered = this.filterEntities(this.props.entlist)
         const selectentlist = this.props.selectedEnts
 
         const data = [
@@ -48,23 +51,26 @@ export default class NewSub1 extends React.Component{
         ]
 
         const elems = data.map((grp, grpIdx) => 
-            <EntityList 
+            <DragList 
                 key={grp.title} 
-                entlist = {grp.items} 
+                itemList = {grp.items} 
+                filterList = {!grpIdx ? entlistfiltered : null }
                 title={grp.title} 
                 grpIdx={grpIdx}
                 handleDragStart = {this.props.handleDragStart}
                 handleDragEnter = {this.props.handleDragEnter}
                 handleDragEnd = {this.props.handleDragEnd}
+                visMode = "vertical"
+                modifiableChildren = {false}
                 searched = {this.state.searched}
                 search_mode = {this.state.search_mode}
                 search_modes = {this.state.search_modes}
                 handleSearchChange = {this.handleSearchChange}
+                handleSelection = {null}
             />)
 
         return(
             <div className="newSubPage1">
-                
                 {elems}
             </div>
         )
