@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 import "./NewSubscription.css"
+import { Link} from "react-router-dom";
 import NewSub1 from "./NewSubscriptionSteps/NewSub1";
-import { Link,  useNavigate} from "react-router-dom";
 import NewSub2 from "./NewSubscriptionSteps/NewSub2";
+import NewSub3 from "./NewSubscriptionSteps/NewSub3";
 
 export default class NewSubscriptionPage extends React.Component{
     constructor(props){
@@ -19,7 +20,7 @@ export default class NewSubscriptionPage extends React.Component{
             selectedAttrs: [],
             conditionAttrs: [],
             conditionDetails: [],
-            subDetails: [],
+            subDetails: {},
             payload: {},
             payloadOk : false,
             elementDragging: {},
@@ -36,8 +37,21 @@ export default class NewSubscriptionPage extends React.Component{
         this.handleDragEnterAttrs = this.handleDragEnterAttrs.bind(this)
         this.handleDragEnd = this.handleDragEnd.bind(this)
         this.setAttrList = this.setAttrList.bind(this)
+        this.handleDetailsChange = this.handleDetailsChange.bind(this)
     }
 
+
+    handleDetailsChange(e){
+     
+        const name = e.target.name
+        const value = e.target.value
+        const newdetails = {[name]: value}
+        console.log(e.target.name, e.target.value)
+        this.setState((prevState) => (
+            {subDetails : {...prevState.subDetails, ...newdetails}}
+        ))
+
+    }
     
     handleDragStart(e, params) {
         //console.log('Drag Starting', params)
@@ -66,8 +80,6 @@ export default class NewSubscriptionPage extends React.Component{
         newName = map[params.grpIdx].n
         oldList = map[dragging.grpIdx].l
         oldName = map[dragging.grpIdx].n
-
-
         
         try{
             
@@ -129,12 +141,8 @@ export default class NewSubscriptionPage extends React.Component{
         oldList = map[dragging.grpIdx].l
         oldName = map[dragging.grpIdx].n
 
-        
 
-
-        /* if (!this.state[newName].includes(this.state[oldName][dragging.entIdx])){} */
         newList.splice(params.entIdx, 0, oldList.splice(dragging.entIdx, 1)[0])
-        
         this.setState(
             {
                 [newName] : newList,
@@ -144,8 +152,7 @@ export default class NewSubscriptionPage extends React.Component{
             }
         )
         this.evaluateNext()
-        this.setAttrList()
-        
+        this.setAttrList() 
     }
 
 
@@ -153,6 +160,7 @@ export default class NewSubscriptionPage extends React.Component{
     handleDragEnd(e, params){
         this.setState({elementDragging:null})
     }
+
 
     setAttrList(){
         const entlist = this.state.selectedEnts
@@ -168,6 +176,7 @@ export default class NewSubscriptionPage extends React.Component{
  
     }
 
+
     async incrementStage(){
         //TODO: Search for other navigation feature
         //window.history.back() // Currently the only working "navigation" trick
@@ -178,6 +187,7 @@ export default class NewSubscriptionPage extends React.Component{
         })
         this.evaluateNext()
     }
+
 
     async decrementStage(){
         const stage = this.state.stage
@@ -193,6 +203,7 @@ export default class NewSubscriptionPage extends React.Component{
         
         this.evaluateNext()
     }
+
 
     evaluateNext(){
         const stage = this.state.stage
@@ -259,9 +270,12 @@ export default class NewSubscriptionPage extends React.Component{
                             handleDragEnter = {this.handleDragEnterAttrs}
                         />;
             case 3:
-                return <NewSub1 />;
+                return <NewSub3 
+                            subDetails = {this.state.subDetails}
+                            handleDetailsChange = {this.handleDetailsChange}
+                        />;
             case 4:
-                return <NewSub1 />;
+                return <NewSub3 />;
 
             default:
                 return null;
@@ -356,11 +370,3 @@ class PageFooter extends React.Component{
     }
 }
 
-
-
-export function MyNavigator(props){
-
-    useNavigate(props.link)
-    //navigate()
-
-}

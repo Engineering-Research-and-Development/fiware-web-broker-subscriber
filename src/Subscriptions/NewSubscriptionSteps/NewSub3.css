@@ -1,0 +1,23 @@
+.subPage3{
+    display: flex;
+    flex-flow: column wrap;
+    justify-self: center;
+    align-self: center;
+    margin: auto;
+    margin-top: 30px;
+    row-gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 80%;
+}
+
+.subPage3 .subElement{
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+    align-items: center;
+}
+
+.subPage3 .subElement *{
+    margin: 0
+}

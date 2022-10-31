@@ -5,8 +5,8 @@ import DragItem from "./DragItem";
 
 export default class DragList extends React.Component{
     constructor(props){
-        // props: itemList, filterList, title, handleDragStart, handleDragEnd, handleDragEnter, handleClick, visMode {vertical / horizontal}, modifiableChildren {true,false}, handleSelection, selected
-        // for header: searched, search_mode, search_modes, handleSearchChange
+        // props: itemList, filterList?, title, placeholder?, handleDragStart?, handleDragEnd?, handleDragEnter?, handleClick?, visMode {vertical / horizontal}, modifiableChildren {true,false}, handleSelection?, selected?
+        // for header: searched?, search_mode?, search_modes?, handleSearchChange?
         super(props)
         this.myHandleDragEnter = this.myHandleDragEnter.bind(this)
     }
@@ -32,7 +32,7 @@ export default class DragList extends React.Component{
             <div className={`drag-tab ${this.props.visMode}`}>
                 {grpIdx == 0 ? header : <ItemListHeader title={this.props.title}/>}
                 <div className={`drag-box ${this.props.visMode}`} onDragEnter={(e) => this.myHandleDragEnter(e, {grpIdx, entIdx: 0})}>
-                    
+                    <h3 style={{color:"gray"}}>{this.props.placeholder}</h3>
                 </div>
             </div>
         )

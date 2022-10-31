@@ -113,14 +113,15 @@ export default class NewSub2 extends React.Component{
                     key={grp.title} 
                     itemList = {grp.items}
                     filterList = {!grpIdx ? filterattrlist : null }
-                    title={grp.title} 
+                    title={grp.title}
+                    placeholder="All attributes set"
                     grpIdx={grpIdx}
                     handleDragStart = {this.props.handleDragStart}
                     handleDragEnter = {this.props.handleDragEnter}
                     handleDragEnd = {this.props.handleDragEnd}
                     handleSearchChange = {this.handleSearchAttributeChange}
                     visMode = "horizontal"
-                    modifiableChildren = {false}
+                    modifiableChildren = {grpIdx == 2? true : false}
                     searched = {this.state.searched}
                     search_mode = {this.state.search_mode}
                     search_modes = {this.state.search_modes}

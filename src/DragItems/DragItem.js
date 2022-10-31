@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faGear} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import "./DragItem.css"
 
@@ -26,6 +28,11 @@ export default class DragItem extends React.Component{
         this.handleDragEnter = this.handleDragEnter.bind(this)
         this.handleSelection = this.handleSelection.bind(this)
         this.decideClass = this.decideClass.bind(this)
+        this.handleIconClick = this.handleIconClick.bind(this)
+    }
+
+    handleIconClick(){
+        alert("Feature not implemented")
     }
 
     handleSelection(e, name){
@@ -84,6 +91,7 @@ export default class DragItem extends React.Component{
             >
                 <h3 onDragEnter={null}>{ent.id}</h3>
                 <h4 onDragEnter={null}>{ent.type}</h4>
+                {this.props.modifiable ? <FontAwesomeIcon onClick={this.handleIconClick} icon={faGear} className="highlight"/> : null}
             </div>
         )
     }

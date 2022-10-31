@@ -38,3 +38,8 @@
     color: red;
 
 }
+
+.drag-elem .highlight:hover{
+    color:white;
+    cursor: pointer;
+}
