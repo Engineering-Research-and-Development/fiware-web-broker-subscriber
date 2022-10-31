@@ -1,4 +1,5 @@
 import React from "react";
+import { ItemListHeader } from "../Reusable Components/ItemsListHeader";
 import "./SubscriptionDetail.css"
 
 
@@ -50,8 +51,9 @@ export default class SubscriptionDetail extends React.Component{
 
         return(
             <div className="subDetail">
+                <ItemListHeader title="Details"/>
                 <div className="subInfo">
-                    <h2>Details:</h2>
+                    <h2>General Info:</h2>
                     <div className="generalInfo">
                         <h4>Id: <p>{sub.id}</p></h4>
                         <h4>Description: <p>{sub.description}</p></h4>

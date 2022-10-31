@@ -1,3 +1,14 @@
+.drag-elem *{
+    margin: 1px
+}
+
+.drag-elem[draggable=true]{
+    cursor: move;
+}
+.drag-elem[selectable=true]{
+    cursor: pointer;
+}
+
 .drag-elem.vertical{
     display: flex;
     flex-direction: column;
@@ -7,17 +18,23 @@
     background-color: rgba(44, 190, 239, 0.459);
 }
 
-.drag-elem *{
-    margin: 5px
+.drag-elem.horizontal{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 2px solid rgb(13, 54, 67);
+    border-radius: 6px;
+    background-color: rgba(44, 190, 239, 0.459);
+    height: 100%;
+    column-gap: 3px;
 }
 
-.drag-elem.vertical.dragging{
-    display: flex;
-    flex-direction: column;
-    border: 2px solid rgb(13, 54, 67);
-    width: 80%;
-    border-radius: 6px;
-    /* background-color: rgba(44, 190, 239, 0.459); */
+.drag-elem.dragging{
     background-color: black;
     opacity: 50%;
+}
+
+.drag-elem.selected{
+    color: red;
+
 }

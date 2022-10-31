@@ -35,12 +35,12 @@ export default class SubscriptionList extends React.Component{
         if (subs.length <= 0) return subs
         if (mode === "entity name") return  subs.filter(function (sub) {
 
-            const entities = sub.subject.entities.filter(ent => ent.id.includes(searched))
+            const entities = sub.subject.entities.filter(ent => ent.id.toLowerCase().includes(searched.toLowerCase()))
             return entities.length > 0 ? true : false
         }
         )
 
-        if (mode === "description") return subs.filter(sub => sub.description.includes(searched))
+        if (mode === "description") return subs.filter(sub => sub.description.toLowerCase().includes(searched.toLowerCase()))
         
     }
 

@@ -5,7 +5,7 @@ import DragItem from "./DragItem";
 
 export default class DragList extends React.Component{
     constructor(props){
-        // props: itemList, filterList, title, handleDragStart, handleDragEnd, handleDragEnter, handleClick, visMode {vertical / horizontal}, modifiableChildren {true,false}
+        // props: itemList, filterList, title, handleDragStart, handleDragEnd, handleDragEnter, handleClick, visMode {vertical / horizontal}, modifiableChildren {true,false}, handleSelection, selected
         // for header: searched, search_mode, search_modes, handleSearchChange
         super(props)
         this.myHandleDragEnter = this.myHandleDragEnter.bind(this)
@@ -52,6 +52,7 @@ export default class DragList extends React.Component{
                     visMode = {this.props.visMode}
                     modifiable = {this.props.modifiableChildren}
                     handleSelection = {this.props.handleSelection} //From Above
+                    selected = {this.props.selected}
                 /> 
         )
         

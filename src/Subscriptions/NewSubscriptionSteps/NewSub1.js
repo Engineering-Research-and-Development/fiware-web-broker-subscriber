@@ -1,6 +1,5 @@
 import React from "react"
 import DragList from "../../DragItems/DragList";
-import EntityList from "../../Entities/EntityList";
 import { ListSearchBar } from "../../Reusable Components/ListSearchBar";
 import "./NewSub1.css"
 
@@ -36,8 +35,8 @@ export default class NewSub1 extends React.Component{
     filterEntities(list){
         const mode = this.state.search_mode
 
-        if (mode=="Name") return list.filter(item => item.id.includes(this.state.searched))
-        if (mode=="Type") return list.filter(item => item.type.includes(this.state.searched))
+        if (mode=="Name") return list.filter(item => item.id.toLowerCase().includes(this.state.searched.toLowerCase()))
+        if (mode=="Type") return list.filter(item => item.type.toLowerCase().includes(this.state.searched.toLowerCase()))
     }
 
     render(){

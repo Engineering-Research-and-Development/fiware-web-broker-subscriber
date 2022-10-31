@@ -36,6 +36,7 @@ export default class NewSub2 extends React.Component{
         }
     
         handleSelection(e, name){
+            if (this.state.selected_ent == name) return this.resetSelection()
             this.setState({selected_ent : name})
         }
 
@@ -61,8 +62,8 @@ export default class NewSub2 extends React.Component{
         filterEntities(list){
             const mode = this.state.search_mode
     
-            if (mode=="Name") return list.filter(item => item.id.includes(this.state.searched_ents))
-            if (mode=="Type") return list.filter(item => item.type.includes(this.state.searched_ents))
+            if (mode=="Name") return list.filter(item => item.id.toLowerCase().includes(this.state.searched_ents.toLowerCase()))
+            if (mode=="Type") return list.filter(item => item.type.toLowerCase().includes(this.state.searched_ents.toLowerCase()))
         }
 
         filterAttributes(list){
@@ -77,13 +78,13 @@ export default class NewSub2 extends React.Component{
                     return attr
                 })
 
-                if (mode=="Name") return list.filter(item => item.id.includes(this.state.searched_attrs)).filter(item => entAttrs.includes(item.id))
-                if (mode=="Type") return list.filter(item => item.type.includes(this.state.searched_attrs)).filter(item => entAttrs.includes(item.id))
+                if (mode=="Name") return list.filter(item => item.id.toLowerCase().includes(this.state.searched_attrs.toLowerCase())).filter(item => entAttrs.includes(item.id))
+                if (mode=="Type") return list.filter(item => item.type.toLowerCase().includes(this.state.searched_attrs.toLowerCase())).filter(item => entAttrs.includes(item.id))
             }
-       
+                
             
-            if (mode=="Name") return list.filter(item => item.id.includes(this.state.searched_attrs))
-            if (mode=="Type") return list.filter(item => item.type.includes(this.state.searched_attrs))
+            if (mode=="Name") return list.filter(item => item.id.toLowerCase().includes(this.state.searched_attrs.toLowerCase()))
+            if (mode=="Type") return list.filter(item => item.type.toLowerCase().includes(this.state.searched_attrs.toLowerCase()))
 
             
         }
@@ -139,15 +140,17 @@ export default class NewSub2 extends React.Component{
                 search_mode = {this.state.search_mode}
                 search_modes = {this.state.search_modes}
                 handleSelection = {this.handleSelection}
+                selected = {this.state.selected_ent}
             />
 
             return(
                 <div className="newSubPage2" >
                     <div className="entityList" >
                         {selectedEntsList}
+                        {/* {this.state.selected_ent ? <h3 onClick = {this.resetSelection}> {`Selected: ${this.state.selected_ent}`}</h3> : null} */}
                     </div>
                     <div className="attrList" >
-                        {this.state.selected_ent ? <h3 onClick = {this.resetSelection}> {`Selected: ${this.state.selected_ent}`}</h3> : null}
+                        
                         {elems}
                     </div>
                     

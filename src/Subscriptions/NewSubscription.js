@@ -33,6 +33,7 @@ export default class NewSubscriptionPage extends React.Component{
         this.decrementStage = this.decrementStage.bind(this)
         this.handleDragStart = this.handleDragStart.bind(this)
         this.handleDragEnterEnts = this.handleDragEnterEnts.bind(this)
+        this.handleDragEnterAttrs = this.handleDragEnterAttrs.bind(this)
         this.handleDragEnd = this.handleDragEnd.bind(this)
         this.setAttrList = this.setAttrList.bind(this)
     }
@@ -44,6 +45,65 @@ export default class NewSubscriptionPage extends React.Component{
         this.setState({elementDragging:params})
     }
 
+    handleDragEnterAttrs(e, params){
+        const dragging = this.state.elementDragging
+        //console.log(params)
+        //dragging : the one dragged. Params: the one dragging is dragged on
+        let newList = []
+        let newName = ""
+        let oldList = []
+        let oldName = ""
+
+        const map = {
+            0 : {n: "attrlist" , l: this.state.attrlist},
+            1 : {n: "selectedAttrs" , l: this.state.selectedAttrs},
+            2 : {n: "conditionAttrs" , l: this.state.conditionAttrs}
+        }
+
+        newList= map[params.grpIdx].l
+        newName = map[params.grpIdx].n
+        oldList = map[dragging.grpIdx].l
+        oldName = map[dragging.grpIdx].n
+
+        console.log("old ", oldName, oldList)
+        console.log("new ", newName, newList)
+
+        
+        try{
+            
+            if (dragging.grpIdx == 0){
+                const elem = this.state[oldName][dragging.entIdx]
+                if (!this.state[newName].includes(elem)){
+                    newList.splice(params.entIdx, 0, elem)
+                    this.setState({[newName] : newList, elementDragging : params, [oldName]:oldList})
+                }
+
+            } else {
+                if (params.grpIdx !==0){
+                    if (!this.state[newName].includes(this.state[oldName][dragging.entIdx])){
+                        newList.splice(params.entIdx, 0, oldList.splice(dragging.entIdx, 1)[0])
+                        this.setState({[newName] : newList, elementDragging : params, [oldName]:oldList})
+                    }
+                }  
+            }
+
+            if (params.grpIdx == dragging.grpIdx){
+                newList.splice(params.entIdx, 0, oldList.splice(dragging.entIdx, 1)[0])
+                this.setState({[newName] : newList, elementDragging : params, [oldName]:oldList})
+            }
+        } catch (e){
+            console.log(e)
+        }
+        // 
+       
+        /* if (!this.state[newName].includes(this.state[oldName][dragging.entIdx])){} */
+
+        
+        
+
+
+    }
+
     async handleDragEnterEnts(e, params){
         const dragging = this.state.elementDragging
         //console.log(params)
@@ -53,27 +113,19 @@ export default class NewSubscriptionPage extends React.Component{
         let oldList = []
         let oldName = ""
 
-        if (params.grpIdx == 0){
-            newList = [... this.state.entlist]
-            newName = "entlist"
-            if (dragging.grpIdx == 0){
-                oldList = newList
-                oldName = newName
-            } else if (dragging.grpIdx == 1){
-                oldList = [... this.state.selectedEnts]
-                oldName = "selectedEnts"
-            } 
-        } else if (params.grpIdx == 1){
-            newList = [... this.state.selectedEnts]
-            newName = "selectedEnts"
-            if (dragging.grpIdx == 0){
-                oldList = [... this.state.entlist]
-                oldName = "entlist"
-            } else if (dragging.grpIdx == 1){
-                oldList = newList
-                oldName = newName
-            } 
+        const map = {
+            0 : {n: "entlist" , l: this.state.entlist},
+            1 : {n: "selectedEnts" , l: this.state.selectedEnts}
         }
+
+        newList= map[params.grpIdx].l
+        newName = map[params.grpIdx].n
+        oldList = map[dragging.grpIdx].l
+        oldName = map[dragging.grpIdx].n
+
+        
+
+
         /* if (!this.state[newName].includes(this.state[oldName][dragging.entIdx])){} */
         newList.splice(params.entIdx, 0, oldList.splice(dragging.entIdx, 1)[0])
         
@@ -87,8 +139,11 @@ export default class NewSubscriptionPage extends React.Component{
         )
 
         this.evaluateNext()
-      
+        this.setAttrList()
+        
     }
+
+
 
     handleDragEnd(e, params){
         this.setState({elementDragging:{}})
@@ -105,6 +160,7 @@ export default class NewSubscriptionPage extends React.Component{
             return entAttrs
         }).flat(1).filter(elem => elem !== undefined )
         this.setState({attrlist:attrlist})
+ 
     }
 
     async incrementStage(){
@@ -116,8 +172,6 @@ export default class NewSubscriptionPage extends React.Component{
             stage : stage +1 
         })
         this.evaluateNext()
-        
-       
     }
 
     async decrementStage(){
@@ -190,6 +244,7 @@ export default class NewSubscriptionPage extends React.Component{
                             conditionAttrs = {this.state.conditionAttrs}
                             handleDragStart = {this.handleDragStart}
                             handleDragEnd = {this.handleDragEnd}
+                            handleDragEnter = {this.handleDragEnterAttrs}
                         />;
             case 3:
                 return <NewSub1 />;
@@ -203,6 +258,7 @@ export default class NewSubscriptionPage extends React.Component{
     
     componentDidUpdate(prevProps, prevState){
         if (this.state.selectedEnts !== prevState.selectedEnts){
+            console.log("Updating")
             this.evaluateNext()
             this.setAttrList()
         }

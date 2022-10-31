@@ -14,6 +14,8 @@ export default class DragItem extends React.Component{
          * handleDragEnter
          * visMode = {horizontal vertical}
          * modifiable = {true false}
+         * handleSelection
+         * selected
          */
         this.state = {
             dragging: false
@@ -22,6 +24,8 @@ export default class DragItem extends React.Component{
         this.handleDragStart = this.handleDragStart.bind(this)
         this.handleDragEnd = this.handleDragEnd.bind(this)
         this.handleDragEnter = this.handleDragEnter.bind(this)
+        this.handleSelection = this.handleSelection.bind(this)
+        this.decideClass = this.decideClass.bind(this)
     }
 
     handleSelection(e, name){
@@ -50,17 +54,27 @@ export default class DragItem extends React.Component{
         this.props.handleDragEnter(e, params)
     }
 
+    decideClass(){
+        let className = `drag-elem ${this.props.visMode}`
+        if(this.state.dragging) return className + " dragging"
+        if(this.props.selected == this.props.ent.id) return className + " selected"
+        return className
+    }
+
     render(){
         const ent = this.props.ent
         if (!ent) return null
 
         const grpIdx = this.props.grpIdx
         const entIdx = this.props.entIdx
+        const className = this.decideClass()
 
         return(
             <div 
-                draggable={true} 
-                className= {this.state.dragging ? `drag-elem ${this.props.visMode} dragging` : `drag-elem ${this.props.visMode}`}
+                draggable={this.props.handleDragStart ? true : false}
+                selectable={this.props.handleSelection? "true" : "false"}
+                /* className= {this.state.dragging ? `drag-elem ${this.props.visMode} dragging` : `drag-elem ${this.props.visMode}`} */
+                className = {className}
                 onDragStart={(e) => this.handleDragStart(e, {grpIdx, entIdx})}
                 onDragEnd={(e) => this.handleDragEnd(e, {grpIdx, entIdx})}
                 onDragEnter={(e) => this.handleDragEnter(e, {grpIdx, entIdx})}
