@@ -50,6 +50,7 @@ export default class DragItem extends React.Component{
 
     handleDragEnter(e, params){
         if (!this.props.handleDragEnter) return
+  
         if (this.state.dragging) return
         this.props.handleDragEnter(e, params)
     }

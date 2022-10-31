@@ -49,6 +49,8 @@ export default class NewSubscriptionPage extends React.Component{
         const dragging = this.state.elementDragging
         //console.log(params)
         //dragging : the one dragged. Params: the one dragging is dragged on
+        if (!this.state.elementDragging) return this.handleDragEnd()
+
         let newList = []
         let newName = ""
         let oldList = []
@@ -65,12 +67,16 @@ export default class NewSubscriptionPage extends React.Component{
         oldList = map[dragging.grpIdx].l
         oldName = map[dragging.grpIdx].n
 
-        console.log("old ", oldName, oldList)
-        console.log("new ", newName, newList)
 
         
         try{
             
+            if (params.grpIdx == dragging.grpIdx){
+                newList.splice(params.entIdx, 0, oldList.splice(dragging.entIdx, 1)[0])
+                this.setState({[newName] : newList, elementDragging : params, [oldName]:oldList})
+                return
+            }
+
             if (dragging.grpIdx == 0){
                 const elem = this.state[oldName][dragging.entIdx]
                 if (!this.state[newName].includes(elem)){
@@ -83,14 +89,14 @@ export default class NewSubscriptionPage extends React.Component{
                     if (!this.state[newName].includes(this.state[oldName][dragging.entIdx])){
                         newList.splice(params.entIdx, 0, oldList.splice(dragging.entIdx, 1)[0])
                         this.setState({[newName] : newList, elementDragging : params, [oldName]:oldList})
-                    }
-                }  
+                    } 
+                }  else {
+                    const deleted = oldList.splice(dragging.entIdx, 1)
+                    this.setState({elementDragging:null, [oldName]:oldList})
+                }
             }
 
-            if (params.grpIdx == dragging.grpIdx){
-                newList.splice(params.entIdx, 0, oldList.splice(dragging.entIdx, 1)[0])
-                this.setState({[newName] : newList, elementDragging : params, [oldName]:oldList})
-            }
+            
         } catch (e){
             console.log(e)
         }
@@ -137,7 +143,6 @@ export default class NewSubscriptionPage extends React.Component{
                 
             }
         )
-
         this.evaluateNext()
         this.setAttrList()
         
@@ -146,7 +151,7 @@ export default class NewSubscriptionPage extends React.Component{
 
 
     handleDragEnd(e, params){
-        this.setState({elementDragging:{}})
+        this.setState({elementDragging:null})
     }
 
     setAttrList(){
@@ -168,7 +173,7 @@ export default class NewSubscriptionPage extends React.Component{
         //window.history.back() // Currently the only working "navigation" trick
         
         const stage = this.state.stage
-        await this.setState({
+        this.setState({
             stage : stage +1 
         })
         this.evaluateNext()
@@ -176,9 +181,16 @@ export default class NewSubscriptionPage extends React.Component{
 
     async decrementStage(){
         const stage = this.state.stage
-        await this.setState({
+        if (stage == 2) {
+            this.setState({
+                selectedAttrs : [],
+                conditionAttrs : []
+            })
+        }
+        this.setState({
             stage : stage - 1
         })
+        
         this.evaluateNext()
     }
 
