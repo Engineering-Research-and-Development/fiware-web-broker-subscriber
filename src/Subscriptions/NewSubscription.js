@@ -1,9 +1,10 @@
 import React from "react";
 import "./NewSubscription.css"
-import { Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import NewSub1 from "./NewSubscriptionSteps/NewSub1";
 import NewSub2 from "./NewSubscriptionSteps/NewSub2";
 import NewSub3 from "./NewSubscriptionSteps/NewSub3";
+import NewSub4 from "./NewSubscriptionSteps/NewSub4";
 
 export default class NewSubscriptionPage extends React.Component{
     constructor(props){
@@ -22,6 +23,7 @@ export default class NewSubscriptionPage extends React.Component{
             conditionDetails: [],
             subDetails: {},
             payload: {},
+            stringifiedPayload: "",
             payloadOk : false,
             elementDragging: {},
             
@@ -46,10 +48,9 @@ export default class NewSubscriptionPage extends React.Component{
         const name = e.target.name
         const value = e.target.value
         const newdetails = {[name]: value}
-        console.log(e.target.name, e.target.value)
         this.setState((prevState) => (
             {subDetails : {...prevState.subDetails, ...newdetails}}
-        ))
+         ), () => this.evaluateNext())
 
     }
     
@@ -178,19 +179,21 @@ export default class NewSubscriptionPage extends React.Component{
 
 
     async incrementStage(){
-        //TODO: Search for other navigation feature
-        //window.history.back() // Currently the only working "navigation" trick
-        
+        //if (stage > 4) return (<Navigate to="/subscriptions" replace/>) -> Navigation after evaluation
+        //TODO: SubmitPayload evaluation. incrementStage not for Submit button.
         const stage = this.state.stage
+        if (stage >= 4) return 
+        
         this.setState({
             stage : stage +1 
-        })
-        this.evaluateNext()
+        }, () => this.evaluateNext())
+        
     }
 
 
     async decrementStage(){
         const stage = this.state.stage
+        if (stage <= 1) return 
         if (stage == 2) {
             this.setState({
                 selectedAttrs : [],
@@ -200,7 +203,6 @@ export default class NewSubscriptionPage extends React.Component{
         this.setState({
             stage : stage - 1
         })
-        
         this.evaluateNext()
     }
 
@@ -219,6 +221,12 @@ export default class NewSubscriptionPage extends React.Component{
                 break
                 //Always active
             case 3:
+                const url = this.state.subDetails.url
+                if (!url){
+                    this.setState({nextOk : false})
+                    return
+                }
+
                 break
                 //Check for some other stuff
             case 4:
@@ -275,7 +283,15 @@ export default class NewSubscriptionPage extends React.Component{
                             handleDetailsChange = {this.handleDetailsChange}
                         />;
             case 4:
-                return <NewSub3 />;
+                return <NewSub4
+                            baseurl = {this.props.baseurl}
+                            service = {this.props.service}
+                            selectedEnts = {this.state.selectedEnts}
+                            selectedAttrs = {this.state.selectedAttrs}
+                            conditionAttrs = {this.state.conditionAttrs}
+                            conditionDetails = {this.state.conditionDetails}
+                            
+                        />;
 
             default:
                 return null;
@@ -313,6 +329,9 @@ export default class NewSubscriptionPage extends React.Component{
     render(){
         const entlist = this.state.entlist
         const stage = this.state.stage
+
+        if (stage > 4) return (<Navigate to="/subscriptions" replace/>)
+
         if (entlist.lenght < 1){
             return(<h1>No entities available at {this.props.baseurl + this.props.service.fiwareService + this.props.service.fiwareServicePath}</h1>)
         }

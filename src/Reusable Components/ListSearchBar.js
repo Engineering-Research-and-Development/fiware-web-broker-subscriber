@@ -33,7 +33,7 @@ export default class ListSearchBar extends React.Component{
 
         return(
             <div className="searchBar">
-                <input className="inputAreas" name="searched" type="text" placeholder={`Insert a ${selected} ...`} value={searched} onChange={this.handleInputChange}/>
+                <input type="search" className="inputAreas" name="searched"  placeholder={`Insert a ${selected} ...`} value={searched} onChange={this.handleInputChange}/>
                 <select className="inputAreas" name="search_mode" value={selected} onChange={this.handleInputChange}>
                     {listModes}
                 </select>
