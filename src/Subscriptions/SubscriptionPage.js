@@ -48,6 +48,7 @@ export default class SubscriptionPage extends React.Component{
                     selected : null
                 }
             )
+            alert("Subscription Successfully Deleted")
 
         } catch (err){
             alert("Something went wrong during subscription deletion:", err)
