@@ -19,8 +19,8 @@ export default class SubscriptionList extends React.Component{
        this.handleBtnClick = this.handleBtnClick.bind(this)
        this.filterSubs = this.filterSubs.bind(this)
        this.handleSearchChange = this.handleSearchChange.bind(this)
+       
     }
-
 
 
     handleBtnClick(id){

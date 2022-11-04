@@ -21,6 +21,7 @@
     max-width: 100%;
     border: 2px solid rgb(13, 54, 67);
     border-radius: 6px;
+    padding: 2px;
     border-collapse: collapse;
 
 }

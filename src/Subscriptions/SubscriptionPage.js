@@ -22,6 +22,36 @@ export default class SubscriptionPage extends React.Component{
         this.fetchSubs = this.fetchSubs.bind(this)
         this.handleSelectedSubscriptionChange = this.handleSelectedSubscriptionChange.bind(this)
         this.refreshAll = this.refreshAll.bind(this)
+        this.deleteSub = this.deleteSub.bind(this)
+    }
+
+    async deleteSub(id, e){
+        const url = "http://" + this.props.baseurl + "subscriptions/" + id
+    
+        try{
+            const headers =  {
+                method: 'DELETE',
+                headers: {
+                    'Fiware-Service': this.props.service.fiwareService,
+                    'Fiware-ServicePath' : this.props.service.fiwareServicePath, 
+                }
+            }
+            const data = await fetch(url, headers)
+            
+            if (!data.ok) throw data.status + data.statusText
+
+            const sublist = this.state.sublist
+            const newSubList = sublist.filter(sub => sub.id !== id)
+            this.setState(
+                {
+                    sublist : newSubList,
+                    selected : null
+                }
+            )
+
+        } catch (err){
+            alert("Something went wrong during subscription deletion:", err)
+        }
     }
 
 
@@ -44,7 +74,7 @@ export default class SubscriptionPage extends React.Component{
         this.setState({
             selected : selected
         }) 
-        console.log(selected)
+        //console.log(selected)
 
     }
 
@@ -83,10 +113,11 @@ export default class SubscriptionPage extends React.Component{
     render(){
         const subs = this.state.sublist
         const selected = this.state.selected
+        const mode = this.props.baseurl.includes('/v2/') ? "v2" : "ld"
         return(
             <div className="subPage">
                 <SubscriptionList sublist={subs} handleSelectedSubscriptionChange={this.handleSelectedSubscriptionChange} />
-                <SubscriptionDetail sub={selected}/>
+                <SubscriptionDetail sub={selected} mode={mode} deleteSub = {this.deleteSub}/>
             </div>
         )
     }

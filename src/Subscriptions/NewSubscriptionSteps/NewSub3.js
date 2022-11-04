@@ -23,7 +23,7 @@ export default class NewSub3 extends React.Component{
 
     render(){
         const dets = this.props.subDetails
-        console.log(dets)
+   
 
         
         return(
