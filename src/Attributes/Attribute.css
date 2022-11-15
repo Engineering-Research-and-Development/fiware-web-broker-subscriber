@@ -1,23 +1,20 @@
-.drag-elem{
+.drag-elem-attr{
     display: flex;
     flex-direction: column;
     border: 2px solid rgb(13, 54, 67);
-    width: 80%;
     border-radius: 6px;
     background-color: rgba(44, 190, 239, 0.459);
 }
 
-.drag-elem *{
+.drag-elem-attr *{
     margin: 5px
 }
 
-.drag-elem.dragging{
+.drag-elem-attr.dragging{
     display: flex;
     flex-direction: column;
     border: 2px solid rgb(13, 54, 67);
-    width: 80%;
     border-radius: 6px;
-    /* background-color: rgba(44, 190, 239, 0.459); */
     background-color: black;
     opacity: 50%;
 }

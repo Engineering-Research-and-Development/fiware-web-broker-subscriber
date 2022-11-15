@@ -1,0 +1,30 @@
+.newSubPage2{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: space-around;
+    justify-content: flex-start;
+    height: auto;
+    margin-top: 30px;
+}
+
+.newSubPage2 .attrList{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: space-between;
+    height: auto;
+    flex-grow: 3;
+    max-width: 60%;
+    margin-right: 60px;
+    row-gap: 10px;
+    
+}
+
+.newSubPage2 .entityList{
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    align-items: center;
+    height: auto;
+    flex-grow: 1;
+}

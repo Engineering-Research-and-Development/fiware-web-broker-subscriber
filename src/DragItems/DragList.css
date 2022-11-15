@@ -1,0 +1,48 @@
+.drag-tab.vertical{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    width: 25vw;
+    height: 65vh;
+    margin: 0;
+}
+
+
+.drag-box.vertical{
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-y: scroll;
+    row-gap: 10px;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgb(13, 54, 67);
+    border-radius: 6px;
+    padding-block: 10px;
+}
+
+.drag-tab.horizontal{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    width: 100%;
+    height: 20vh;
+}
+
+.drag-box.horizontal{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    column-gap: 10px;
+    width: 100%;
+    border: 2px solid rgb(13, 54, 67);
+    border-radius: 6px;
+    padding-block: 10px;
+    height: 20vh;
+   
+}
+

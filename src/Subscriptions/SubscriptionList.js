@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { ItemListHeader } from "../Reusable Components/ItemsListHeader";
 import "./SubscriptionList.css"
 
 export default class SubscriptionList extends React.Component{
@@ -19,8 +19,8 @@ export default class SubscriptionList extends React.Component{
        this.handleBtnClick = this.handleBtnClick.bind(this)
        this.filterSubs = this.filterSubs.bind(this)
        this.handleSearchChange = this.handleSearchChange.bind(this)
+       
     }
-
 
 
     handleBtnClick(id){
@@ -35,12 +35,12 @@ export default class SubscriptionList extends React.Component{
         if (subs.length <= 0) return subs
         if (mode === "entity name") return  subs.filter(function (sub) {
 
-            const entities = sub.subject.entities.filter(ent => ent.id.includes(searched))
+            const entities = sub.subject.entities.filter(ent => ent.id.toLowerCase().includes(searched.toLowerCase()))
             return entities.length > 0 ? true : false
         }
         )
 
-        if (mode === "description") return subs.filter(sub => sub.description.includes(searched))
+        if (mode === "description") return subs.filter(sub => sub.description.toLowerCase().includes(searched.toLowerCase()))
         
     }
 
@@ -57,38 +57,23 @@ export default class SubscriptionList extends React.Component{
         const search_modes = this.state.search_modes
         const search_mode = this.state.search_mode
         const searched = this.state.searched
+        //TODO Improve this null
         if (!subs){
             return null
         }
-        if (this.props.sublist.length < 1) return (
-                <div className="subTable">
-                    <div className="subHeader">
-                        <SubscriptionListSearchBar
-                            search_modes = {search_modes}
-                            search_mode = {search_mode}
-                            searched = {searched}
-                            handleSearchChange = {this.handleSearchChange}
-                            changeService = {this.changeService}
-                        />
-                    </div>
-                    <h2>No Subscriptions Available for this service</h2>
-                </div>
-                
-            )
+        
         return(
             <div className="subTable">
-                <div className="subHeader">
-                    <SubscriptionListSearchBar
-                        search_modes = {search_modes}
-                        search_mode = {search_mode}
-                        searched = {searched}
-                        handleSearchChange = {this.handleSearchChange}
-                        changeService = {this.changeService}
-                    />
-                    
-                </div>
+                <ItemListHeader 
+                    search_mode = {search_mode}
+                    search_modes = {search_modes}
+                    searched = {searched}
+                    handleSearchChange = {this.handleSearchChange}
+                    withSearchbarButton = {"/subscriptions/new"}
+                    withSearchbar = {true}
+                />
                 <div className="subList">
-                    <SubBody subs={subs} handleSubSelection={this.handleBtnClick}/>
+                    {this.props.sublist.length > 1 ? <SubBody subs={subs} handleSubSelection={this.handleBtnClick}/> : <h2>No Subscriptions Available for this service</h2> }
                 </div>
             </div>
         )
@@ -132,48 +117,5 @@ class SubBody extends React.Component{
     }
     
     
-}
-
-
-class SubscriptionListSearchBar extends React.Component{
-    /** Props:
-     * sublist
-     * search_modes
-     * search_mode
-     * searched
-     * handleSearchChange
-     * createNew() -> Not sure 
-     */
-    constructor(props){
-        super(props)
-        this.handleInputChange = this.handleInputChange.bind(this)
-    }
-
-    handleInputChange(e){
-        this.props.handleSearchChange(e)
-    }
-
-
-    render(){
-        const searched = this.props.searched
-        const selected = this.props.search_mode
-        const modes = this.props.search_modes
-
-        const listModes = modes.map(mode => <option key={mode} value={mode}>{mode}</option>)
-
-        return(
-            <div className="searchBar">
-                <input className="inputAreas" name="searched" type="text" placeholder={`Insert a ${selected} ...`} value={searched} onChange={this.handleInputChange}/>
-                <select className="inputAreas" name="search_mode" value={selected} onChange={this.handleInputChange}>
-                    {listModes}
-                </select> 
-                <Link className="linkStyle" to="/subscriptions/new"><button className="addBtn">New</button></Link>
-            </div>
-            
-            
-        )
-    }
-
-
 }
 

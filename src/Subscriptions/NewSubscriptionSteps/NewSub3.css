@@ -1,0 +1,40 @@
+.subPage3{
+    display: flex;
+    flex-flow: column wrap;
+    justify-self: center;
+    align-self: center;
+    margin: auto;
+    margin-top: 30px;
+    row-gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 80%;
+}
+
+.subPage3 .subElement{
+    display: flex;
+    flex-flow: row ;
+    column-gap: 30px;
+    align-items: center;
+    justify-content: left;
+    text-align: left;
+    max-width: 100%;
+    border: 2px solid rgb(13, 54, 67);
+    border-radius: 6px;
+    padding: 2px;
+    border-collapse: collapse;
+
+}
+
+.subPage3 textarea{
+    display: flex;
+    width: 250px;
+    height: 60px;
+    flex-shrink: 0.01;
+}
+
+.subPage3 .subElement *{
+    margin: 0;
+    border-radius: 6px;
+    border: 0px
+}

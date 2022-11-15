@@ -1,7 +1,9 @@
 import React from "react";
-import "./Entity.css"
+import "./Attribute.css"
 
-export default class Entity extends React.Component{
+
+
+export default class Attribute extends React.Component{
 
     constructor(props){
         super(props)
@@ -10,6 +12,7 @@ export default class Entity extends React.Component{
          * ent_idx
          * grp_idx
          * handleDragStart
+         * handleDragEnter
          * handleDragEnd
          */
         this.state = {
@@ -42,7 +45,6 @@ export default class Entity extends React.Component{
 
     render(){
         const ent = this.props.ent
-
         if (!ent) return null
 
         const grpIdx = this.props.grpIdx
@@ -51,13 +53,13 @@ export default class Entity extends React.Component{
         return(
             <div 
                 draggable={true} 
-                className= {this.state.dragging ? "drag-elem dragging" : "drag-elem"}
+                className= {this.state.dragging ? "drag-elem-attr dragging" : "drag-elem-attr"}
                 onDragStart={(e) => this.handleDragStart(e, {grpIdx, entIdx})}
                 onDragEnd={(e) => this.handleDragEnd(e, {grpIdx, entIdx})}
                 onDragEnter={(e) => this.handleDragEnter(e, {grpIdx, entIdx})}
+                
             >
-                <h3>{ent.id}</h3>
-                <h4>{ent.type}</h4>
+                <h3 onDragEnter={null}>{ent.id}</h3>
             </div>
         )
     }
