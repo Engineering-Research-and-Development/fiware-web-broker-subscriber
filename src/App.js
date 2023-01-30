@@ -3,7 +3,6 @@ import Nav from './Nav/nav';
 import Home from './Home/home';
 import Entity from './Entities/Entities';
 import SubscriptionPage from './Subscriptions/SubscriptionPage';
-import ItemDetail from './ShopItemDetail/detail';
 import UrlForm from './UrlForm/UrlForm';
 import React from 'react';
 import {
@@ -13,7 +12,18 @@ import {
   } from'react-router-dom'
 import NewSubscriptionPage from './Subscriptions/NewSubscription';
 
+
 class App extends React.Component {
+  /**
+   * 
+   * This component is the heart of the application.
+   * It contains both a router to connect every main application page and
+   * it saves the state of the application, included the currently connected broker,
+   * mode, services, etc.
+   * TODO: switch this one to sessionStorage o localStorage
+   * 
+   */
+
   constructor(props){
     super(props)
     this.state = {
@@ -22,9 +32,9 @@ class App extends React.Component {
       modes:['/v2/', '/ngsi-ld/v1/'],
       mode: '/v2/',
       btn_disabled: false,
-      services: [],
-      selected_service: 0,
-      selected_link: "Home"
+      services: [], // List of Context Broker Services retrieved after connection
+      selected_service: 0, // Index of the currently selected service
+      selected_link: "Home" // Current page link of the app.
     }
     this.handleURLChange = this.handleURLChange.bind(this)
     this.handleURLSubmit = this.handleURLSubmit.bind(this)
@@ -46,11 +56,20 @@ class App extends React.Component {
     })
   }
 
+  /**
+   * 
+   * @param {String} link 
+   * This function set currently selected link.
+   * When a link is selected, the main page shown is updated
+   */
   handleLinkSelection(link){
     this.setState({selected_link : link})
   }
 
-  //Disconnect from a context broker, resetting state to initial state
+  /**
+   * @param {Event} e onClick event from Disconnect Button
+   * Disconnect from a context broker, resetting state to initial state
+  */
   handleDisconnect(e){
     this.setState({
       brokerurl:"",
@@ -76,6 +95,7 @@ class App extends React.Component {
     const url = this.state.brokerurl
     const mode = this.state.mode
     this.setState({btn_disabled: true})
+
     if (url.length <= 0){
       alert("Please, insert a valid address in form of IP:port")
       this.setState({btn_disabled: false})
@@ -100,6 +120,7 @@ class App extends React.Component {
     const submitted = this.state.submitted
     const url = this.state.brokerurl
     const mode = this.state.mode
+
     if (!submitted){
       return(
         <Router>
@@ -123,11 +144,12 @@ class App extends React.Component {
           </div>
         </Router>
       )
-    } else {
+    } 
+    else {
       return(
         <Router>
           <div className="App">
-            <Nav clickDisconnect={this.handleDisconnect} selected={this.state.selected_link} setLink={this.handleLinkSelection}/>
+            <Nav selected={this.state.selected_link} clickDisconnect={this.handleDisconnect} setLink={this.handleLinkSelection}/>
             <div style={{paddingTop:"90px"}}>
               <Routes>
                 <Route path= "/" 
@@ -156,8 +178,8 @@ class App extends React.Component {
                   />}
                 /> 
                 
-                {/*In questo modo faccio routing dinamico! Parametro:id*/}
-                <Route path="/shop/:id" element={<ItemDetail/>}/> {/*In questo modo faccio routing dinamico! Parametro:id*/}
+                {/*Reminder: in this way I can do dynamic routing -> Parameter:id*
+                <Route path="/shop/:id" element={<ItemDetail/>}/>*/}
               </Routes>
             </div>   
           </div>
@@ -165,15 +187,20 @@ class App extends React.Component {
       )
     }
   };
+  
 }
 
-
+/**
+ * Returns the APP header when not connected to URL
+ * 
+ * @returns {JSX.Element}
+ */
 function HeaderElement(props){
   return(
     <div className='app-header'>
       <img align="left" src='https://upload.wikimedia.org/wikipedia/commons/9/98/Engineering_logo.png' alt="Logo" width="120px" height="auto"/>
       <div className='appName'>
-        <h1 >FIWARE Orion Context Broker Subscription Tool</h1>
+        <h1 >FIWARE Context Brokers Subscription Tool</h1>
       </div>
     </div>
   )

@@ -1,8 +1,17 @@
 import React from "react";
 import "./home.css"
+import CBService from "../Models/CBService";
 
-
-class Home extends React.Component{
+class Home extends React.Component {
+    /**
+     * 
+     * @param {string} cburl
+     * @param {string} version
+     * @param {* CBService} services
+     * @param {CBService} selected_service
+     * @param {Function} onServiceDetection //
+     * @param {Function} onServiceSelection
+     */
     constructor(props){
         super(props)
         this.returnMetrics = this.returnMetrics.bind(this)
@@ -22,7 +31,6 @@ class Home extends React.Component{
                     fiwareServicePath : key2 === "root-subserv" ? '/' : `/${key2}`,
                     stats:subserv}
             })
-            
             return subservlist
         })
         this.props.onServiceDetection(servlist.flat(1))
@@ -38,7 +46,6 @@ class Home extends React.Component{
             () => this.returnMetrics(),
             2000
         )
-        ///this.returnMetrics()
     }
 
     componentWillUnmount(){
