@@ -5,20 +5,21 @@ import "./DragItem.css"
 
 export default class DragItem extends React.Component{
 
+    /**
+     * 
+     * @param {Object} ent Item itself
+     * @param {int} grpIdx group index related to the item's list
+     * @param {int} entIdx index related to this item in the list
+     * @param {Object} selected? Selected entity
+     * @param {string} visMode Visualization mode for item: horizontal / vertical
+     * @param {boolean} modifiable Boolean to set the item modifiable
+     * @param {Function} handleDragStart?
+     * @param {Function} handleDragEnd?
+     * @param {Function} handleDragEnter?
+     * @param {Function} handleSelection? Function that triggers when an item is clicked
+     */
     constructor(props){
         super(props)
-        /**Props:
-         * ent
-         * entIdx
-         * grpIdx
-         * handleDragStart
-         * handleDragEnd
-         * handleDragEnter
-         * visMode = {horizontal vertical}
-         * modifiable = {true false}
-         * handleSelection
-         * selected
-         */
         this.state = {
             dragging: false
         }
@@ -31,15 +32,34 @@ export default class DragItem extends React.Component{
         this.handleIconClick = this.handleIconClick.bind(this)
     }
 
+    /**
+     * Function to implement: modify attribute conditions
+     */
     handleIconClick(){
         alert("Feature not implemented")
     }
 
+    /**
+     * 
+     * @param {Event} e onClick event that trigger selection 
+     * @param {string} name Name of the selected item
+     * @returns null if there is no handleSelection property
+     * 
+     * Function that call parent's handleSelection if property is set
+     */
     handleSelection(e, name){
         if (!this.props.handleSelection) return
         this.props.handleSelection(e, name)
     }
 
+    /**
+     * 
+     * @param {DragEvent} e onDragStart event that triggers
+     * @param {int, int} params group index and item index of the dragged item
+     * @returns null if no handleDragStart property is set
+     * Function that manage a dragStart event. The timeout is set for graphical purposes.
+     * Sets also the current dragged item to "dragging"
+     */
     handleDragStart(e, params){
         if (!this.props.handleDragStart) return
         this.props.handleDragStart(e, params)
@@ -48,6 +68,14 @@ export default class DragItem extends React.Component{
         }, 0)
     }
 
+    /**
+     * 
+     * @param {DragEvent} e onDragEnd event that triggers
+     * @param {int, int} params group index and item index of the dragged item
+     * @returns null if no handleDragEnd property is set
+     * Function that manage a dragEnd event. 
+     * Resets also the current "dragging" property
+     */
     handleDragEnd(e, params){
         if (!this.props.handleDragEnd) return
         //this.props.handleDragStart(e, params)
@@ -55,6 +83,14 @@ export default class DragItem extends React.Component{
         this.props.handleDragEnd(e, params)
     }
 
+
+    /**
+     * 
+     * @param {DragEvent} e onDragEnter event that triggers
+     * @param {int, int} params group index and item index of the dragged item
+     * @returns null if no handleDragEnter property is set or if the item is not dragged
+     * Function that manage a dragEnter event
+     */
     handleDragEnter(e, params){
         if (!this.props.handleDragEnter) return
   
@@ -62,6 +98,12 @@ export default class DragItem extends React.Component{
         this.props.handleDragEnter(e, params)
     }
 
+    /**
+     * 
+     * @returns {string} name of the style class to show
+     * Function to build class Name from drag-elem, by adding dragging and selected if
+     * proper conditions are met
+     */
     decideClass(){
         let className = `drag-elem ${this.props.visMode}`
         if(this.state.dragging) return className + " dragging"
@@ -69,6 +111,12 @@ export default class DragItem extends React.Component{
         return className
     }
 
+    /**
+     * 
+     * @returns {JSX.Element}
+     * Renders a box with the item of a DragList, setting the style dynamically
+     * If item is modifiable, then adds also a clickable icon
+     */
     render(){
         const ent = this.props.ent
         if (!ent) return null

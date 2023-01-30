@@ -6,18 +6,25 @@ import "./NewSub4.css"
 
 
 export default class NewSub4 extends React.Component{
+    /**
+     * 
+     * @param {string} stringifiedPayload Stringified JSON from subscription payload
+     * @param {Function} changeStringifiedPayload Delegates Payload change to parent component (NewSubscription)
+     */
     constructor(props){
         super(props)
-        /**
-         * stringifiedPayload
-         */
         this.changeStringifiedPayload = this.changeStringifiedPayload.bind(this)
+        
     }
 
     changeStringifiedPayload(e){
         this.props.changeStringifiedPayload(e)
     }
 
+    /**
+     * 
+     * @returns {JSX.Element} A Textarea filled with payload JSON
+     */
     render(){
         const json = this.props.stringifiedPayload
         return(
@@ -33,7 +40,7 @@ export default class NewSub4 extends React.Component{
 
 }
 
-
+// NOT IMPLEMENTED YET: function to highlight syntax errors
 function syntaxHighlight(json) {
     if (typeof json != 'string') {
          json = JSON.stringify(json, undefined, 2);

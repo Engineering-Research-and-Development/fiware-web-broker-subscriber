@@ -5,16 +5,16 @@ import "./NewSub1.css"
 
 
 export default class NewSub1 extends React.Component{
+    /**
+     * Props:
+     * @param {*Object} entlist List of availabale entities from the current service
+     * @param {*Object} selectedEnts List of selected entities from the entlist
+     * @param {Function} handleDragStart?
+     * @param {Function} handleDragEnd?
+     * @param {Function} handleDragEnter?
+     */
     constructor(props){
         super(props)
-        /** Props:
-         * entlist
-         * selectedEnts
-         * setList (function) ?
-         * handleDragStart
-         * handleDragEnd
-         * handleDragEnter
-         */
         this.state = {
             searched : "",
             search_modes : ['Name', 'Type'],
@@ -24,6 +24,11 @@ export default class NewSub1 extends React.Component{
         this.filterEntities = this.filterEntities.bind(this)
     }
 
+    /**
+     * 
+     * @param {Event} e onChange event
+     * Function that change both stored search mode and searched item from searchbar
+     */
     handleSearchChange(e){
         const name = e.target.name
         const value = e.target.value
@@ -32,6 +37,12 @@ export default class NewSub1 extends React.Component{
         })
     }
 
+    /**
+     * 
+     * @param {*Object} list input list of items
+     * @returns {*Object} output filtered list from search criteria
+     * Make lowecase both id and type, comparing with the selected one (case-insensitive seach)
+     */
     filterEntities(list){
         const mode = this.state.search_mode
 
@@ -39,6 +50,13 @@ export default class NewSub1 extends React.Component{
         if (mode=="Type") return list.filter(item => item.type.toLowerCase().includes(this.state.searched.toLowerCase()))
     }
 
+    /**
+     * 
+     * @returns {JSX.Element}
+     * Build a dictionary of items (data).
+     * Then iterate on that dictionary to build a list of elements for each item in dictionary
+     * based on its content
+     */
     render(){
         const entlist = this.props.entlist
         const entlistfiltered = this.filterEntities(this.props.entlist)

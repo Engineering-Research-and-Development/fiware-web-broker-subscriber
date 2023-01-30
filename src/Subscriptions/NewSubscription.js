@@ -161,9 +161,6 @@ export default class NewSubscriptionPage extends React.Component{
             payload : payload,
             stringifiedPayload : JSON.stringify(payload, null, 1)
         })
-
-
-
     }
 
 
@@ -241,11 +238,8 @@ export default class NewSubscriptionPage extends React.Component{
        
         /* if (!this.state[newName].includes(this.state[oldName][dragging.entIdx])){} */
 
-        
-        
-
-
     }
+
 
     async handleDragEnterEnts(e, params){
         const dragging = this.state.elementDragging

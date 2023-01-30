@@ -5,23 +5,31 @@ import "./ListSearchBar.css"
 
 export default class ListSearchBar extends React.Component{
     /** Props:
-     * withNewButton -> Add Button Link for New
-     * search_modes
-     * search_mode
-     * searched
-     * handleSearchChange
+     * @param {boolean} withNewButton Parameter to set, deciding if the searchbar has a button
+     * @param {string} searched String containing the searched element
+     * @param {string} search_mode Search mode (i.e: type, name, etc...)
+     * @param {* string} search_modes List of of selectable modes
+     * @param {Function} handleSearchChange Function that delegates search input change
      */
     constructor(props){
         super(props)
         this.handleInputChange = this.handleInputChange.bind(this)
     }
 
+    /**
+     * 
+     * @param {Event} e onChange event triggered by textbar change
+     * Function that delegates to parent component the state saving of searched element
+     */
     handleInputChange(e){
         this.props.handleSearchChange(e)
     }
 
-
-    render(){
+    /**
+     * 
+     * @returns {JSX.Element} A searchbar with an optional "+" button
+     */
+    render() {
         const searched = this.props.searched
         const selected = this.props.search_mode
         const modes = this.props.search_modes

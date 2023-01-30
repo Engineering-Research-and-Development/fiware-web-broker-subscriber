@@ -2,14 +2,14 @@ import React from "react";
 import "./NewSub3.css"
 
 export default class NewSub3 extends React.Component{
+    /**
+     * Props:
+     * @param {Object} subDetails Dictionary of subscription parameters
+     * @param {Function} handleDetailsChange Function to delegate input change handling to parent (NewSubscription)
+     */
     constructor(props){
         super(props)
-        /** Props
-         * subDetails
-         * handleDetailsChange
-         */
         this.handleDetailsChange = this.handleDetailsChange.bind(this)
-
 
         this.state = {
             attrsFormats : ["normalized", "keyValues", "values"],
@@ -21,11 +21,14 @@ export default class NewSub3 extends React.Component{
         this.props.handleDetailsChange(e)
     }
 
+    /**
+     * 
+     * @returns {JSX.Element}
+     * This function renders a form with different fields types.
+     */
     render(){
         const dets = this.props.subDetails
    
-
-        
         return(
             <div className="subPage3">
                 <SectionElement title="General Info"/>
@@ -42,8 +45,16 @@ export default class NewSub3 extends React.Component{
 }
 
 
+/**
+ * Props:
+ * @param {string} propertyName Payload Name of the property in this field
+ * @param {string} extendedName Display name of the property in this field
+ * @param {string} propertyVal Value of the property in this field
+ * @param {string} type Field type
+ * @param {Function} handleDetailsChange Function that delegates property change to parent component
+ * @returns {JSX.Element}
+ */
 function InputSubElement(props){
-    //handleDetailsChange, propertyName, propertyVal, extendedName, type
     return(
         <div className="subElement">
             <p>{props.extendedName}</p>
@@ -59,8 +70,15 @@ function InputSubElement(props){
     )
 }
 
+/**
+ * Props:
+ * @param {string} propertyName Payload Name of the property in this field
+ * @param {string} extendedName Display name of the property in this field
+ * @param {string} propertyVal Value of the property in this field
+ * @param {Function} handleDetailsChange Function that delegates property change to parent component
+ * @returns {JSX.Element}
+ */
 function TextareaSubElement(props){
-    //handleDetailsChange, propertyName, propertyVal, extendedName
     return(
         <div className="subElement">
             <p>{props.extendedName}</p>
@@ -79,6 +97,16 @@ function TextareaSubElement(props){
     )
 }
 
+
+/**
+ * Props:
+ * @param {string} propertyName Payload Name of the property in this field
+ * @param {string} extendedName Display name of the property in this field
+ * @param {string} propertyVal Value of the property in this field
+ * @param {*string} selectOptions List of selectable elements
+ * @param {Function} handleDetailsChange Function that delegates property change to parent component
+ * @returns {JSX.Element}
+ */
 function SelectSubElement(props){
     //handleDetailsChange, selectOptions, propertyName, propertyVal, extendedName
     const elems = props.selectOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)
@@ -98,6 +126,11 @@ function SelectSubElement(props){
     )
 }
 
+/**
+ * Props:
+ * @param {string} title Title of the section
+ * @returns {JSX.Element}
+ */
 function SectionElement(props){
     //sectionTitle
     return(
