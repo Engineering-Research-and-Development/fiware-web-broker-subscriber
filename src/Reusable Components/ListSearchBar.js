@@ -5,7 +5,7 @@ import "./ListSearchBar.css"
 
 export default class ListSearchBar extends React.Component{
     /** Props:
-     * @param {boolean} withNewButton Parameter to set, deciding if the searchbar has a button
+     * @param {string} withNewButton Parameter to set, passing a link to the button. If link is present, then the "+" button is rendered, otherwise not
      * @param {string} searched String containing the searched element
      * @param {string} search_mode Search mode (i.e: type, name, etc...)
      * @param {* string} search_modes List of of selectable modes
