@@ -4,6 +4,12 @@ import "./SubscriptionDetail.css"
 
 // TODO: Expand as LD 
 export default class SubscriptionDetail extends React.Component{
+    /**
+     * 
+     * @param {Object} sub Subscription object
+     * @param {string} mode version of the currently connected CB ['v2', 'ld']
+     * @param {Function} deleteSub function from parent SubscriptionList that deletes an entity
+     */
     constructor(props){
         super(props)
         this.formatDate = this.formatDate.bind(this)
@@ -11,17 +17,35 @@ export default class SubscriptionDetail extends React.Component{
     }
 
     
-
+    /**
+     * 
+     * @param {string} string timestamp string
+     * @returns {string}
+     * Returns a formatted date string from the timestamp string
+     */
     formatDate(string){
         const date = new Date(string)
         const ret = date.toLocaleString()
         return ret
     }
 
+    /**
+     * 
+     * @param {Event} e onClick event
+     * This function is predisposed to modify an entity
+     */
     disabledBtnClick(e){
         alert("Feature Not Implemented")
     }
 
+    /**
+     * 
+     * @returns {JSX.Element}
+     * Returns the subscription detail field.
+     * Here there is lot of formatting due to the complex structure of a subscription
+     * TODO: complete the subscription details with LD, conditions, excluded Attributes etc.+
+     * TODO: Double check if it is correct, deep testing
+     */
     render(){
         const sub = this.props.sub
         const mode = this.props.mode

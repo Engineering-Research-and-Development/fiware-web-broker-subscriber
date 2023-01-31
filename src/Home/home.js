@@ -1,8 +1,18 @@
 import React from "react";
 import "./home.css"
+import CBService from "../Models/CBService.ts";
 
-
-class Home extends React.Component{
+class Home extends React.Component {
+    /**
+     * Component that shows all available services in CB and their stats
+     * 
+     * @param {string} cburl
+     * @param {string} version
+     * @param {* CBService} services
+     * @param {CBService} selected_service
+     * @param {Function} onServiceDetection // Function to delegate state saving of detected services to parent component (App)
+     * @param {Function} onServiceSelection // Function to delegate service selection to parent component (App)
+     */
     constructor(props){
         super(props)
         this.returnMetrics = this.returnMetrics.bind(this)
@@ -11,7 +21,14 @@ class Home extends React.Component{
         
     }
 
-    //Setting App state to save services
+    /**
+     * 
+     * @param {Object} servs // response from fetch API
+     * 
+     * Function to iterate the API response and search for services in Context Broker
+     * It sets the "CBService" object with fiwareService, fiwareServicePath and service stats
+     * Flattens the list, then delegates to parent component (App) the list storing
+     */
     setServices(servs){
         const servlist = Object.keys(servs.services).map(function (key){
             const serv = servs.services[key]
@@ -22,30 +39,44 @@ class Home extends React.Component{
                     fiwareServicePath : key2 === "root-subserv" ? '/' : `/${key2}`,
                     stats:subserv}
             })
-            
             return subservlist
         })
         this.props.onServiceDetection(servlist.flat(1))
     }
 
+    /**
+     * 
+     * @param {Event} e // onChange event to select from a radiobutton
+     * Function that delegates to parent component (App) currently selected service storing
+     */
     changeService(e){
         this.props.onServiceSelection(e.target.value)
     }
 
+    /**
+     * Function to update every 2 seconds service stats, calling the
+     * ReturnMetrics function
+     */
     componentDidMount(){
         this.returnMetrics()
         this.timerID = setInterval(
             () => this.returnMetrics(),
             2000
         )
-        ///this.returnMetrics()
     }
 
+    /**
+     * Function that clear the timer
+     */
     componentWillUnmount(){
         clearInterval(this.timerID)
     }
     
-
+    /**
+     * Function that fetch all service data from the context broker.
+     * It is called every 2 second in this component. If data are received
+     * then it builds the service list and calls for updates
+     */
     async returnMetrics(){
         const url = `http://${this.props.cburl}/admin/metrics`
         let services
@@ -61,7 +92,13 @@ class Home extends React.Component{
         }
     }
 
-    render(){
+    /**
+     * 
+     * @returns {JSX.Element}
+     * Returns a table with service names to select.
+     * When a service is selected, then it is possible to see its stats in another table
+     */
+    render() {
         const completeurl = `${this.props.cburl}${this.props.version}`
         const listServices = this.props.services.map((serv, idx) => 
             <tr key={serv.fiwareService+serv.fiwareServicePath}>
@@ -93,13 +130,15 @@ class Home extends React.Component{
                 </div>
             </div>
         )
-        
-        
     }
 
 }
 
-
+/**
+ * 
+ * @param {CBService} service // Selected service
+ * @returns {JSX.Element} // Table of service stats
+ */
 function ServiceStats(props){
     const servstats = props.service.stats
     const statList = Object.keys(servstats).map(function(key){

@@ -1,17 +1,28 @@
 import React from "react";
 import "./NewSubscription.css"
 import {json, Link, Navigate} from "react-router-dom";
+import CBService from "../Models/CBService";
 import NewSub1 from "./NewSubscriptionSteps/NewSub1";
 import NewSub2 from "./NewSubscriptionSteps/NewSub2";
 import NewSub3 from "./NewSubscriptionSteps/NewSub3";
 import NewSub4 from "./NewSubscriptionSteps/NewSub4";
 
 export default class NewSubscriptionPage extends React.Component{
+    /**
+     * 
+     * @param {string} baseurl Root URL of the context broker comprehending mode
+     * @param {CBService} service Currently selected CB service
+     * 
+     * Component to create a subscription using a simple drag 'n drop interface
+     * This complex component renders 4 pages in different stages as its body.
+     * Each stage allow the building of the payload of the new subscription
+     * - Stage 1: Selection of entities
+     * - Stage 2: Selection of attributes and conditions
+     * - Stage 3: Subscription settings
+     * - Stage 4: Payload checking and customization, subscription creation
+     */
     constructor(props){
         super(props)
-        /** Props:
-         * baseurl (contains mode), service : {fiwareService, fiwareServicePath}
-         */
         this.state = {
             stage : 1,
             nextOk: false,
@@ -45,7 +56,16 @@ export default class NewSubscriptionPage extends React.Component{
     }
     
 
-     async handleNewSubscription(e){
+    /**
+     * 
+     * @param {Event} e onClick event
+     * Function that calls the Create Subscription API from CB
+     * It dynamically builds the request structure with headers and payload
+     * It has error handling in case of a bad response
+     * If the subscription is correctly created, the component redirect the user to the SubscriptionPage component.
+     * Otherwise, it encourages a double checking before sending the request
+     */
+    async handleNewSubscription(e){
         const mode = this.props.baseurl.includes("/v2/") ? "v2" : "ld"
         const contentType = mode == "v2" ? 'application/json' : 'application/ld+json'
         const body = this.state.stringifiedPayload
@@ -66,7 +86,7 @@ export default class NewSubscriptionPage extends React.Component{
             
             if (!data.ok)  throw data.status + data.statusText
 
-            this.setState({stage : 5})
+            this.incrementStage()
             alert("Subscription Created")
 
         } catch (err){
@@ -75,6 +95,13 @@ export default class NewSubscriptionPage extends React.Component{
 
     }
 
+    /**
+     * 
+     * @param {Event} e onChange event that triggers this function
+     * This function allow the update of the stringified payload.
+     * Then evaluates the payload using the evaluateNext function before allowing
+     * request submission
+     */
     changeStringifiedPayload(e){
         const value = e.target.value
 
@@ -85,6 +112,14 @@ export default class NewSubscriptionPage extends React.Component{
 
     }
 
+    /**
+     * Function that takes the previous's stage (1, 2, 3) values to create
+     * the request payload. It creates both a JSON payload and a
+     * stringified payload for stage 4.
+     * This function requires lot of formatting
+     * TODO: complete function saving
+     * TODO: double-check and test for correctness
+     */
     createPayload(){
         const selectedEnts = this.state.selectedEnts
         const selectedAttrs = this.state.selectedAttrs
@@ -156,19 +191,20 @@ export default class NewSubscriptionPage extends React.Component{
             notification : notification,
         }
 
-        //console.log(JSON.stringify(payload))
         this.setState({
             payload : payload,
             stringifiedPayload : JSON.stringify(payload, null, 1)
         })
-
-
-
     }
 
 
+    /**
+     * 
+     * @param {Event} e onChange event that triggers the function
+     * Function that manage piece of the "details" object by adding unexisting details
+     * or updating existing ones
+     */
     handleDetailsChange(e){
-     
         const name = e.target.name
         const value = e.target.value
         const newdetails = {[name]: value}
@@ -178,12 +214,28 @@ export default class NewSubscriptionPage extends React.Component{
 
     }
     
+    /**
+     * 
+     * @param {*} e onDragStart event that triggers the function
+     * @param {int, int} params Group index and Item index of the dragged element
+     * Function that saves the dragging element in the component's state
+     */
     handleDragStart(e, params) {
-        //console.log('Drag Starting', params)
-        //console.log(e.target)
         this.setState({elementDragging:params})
     }
 
+    /**
+     * 
+     * @param {*} e onDragEnter event that triggers the function
+     * @param {int, int} params Group index and Item index of the element in which the dragging element is dragged on
+     * @returns 
+     * This function manages the dragging logic of Stage 2 which has 3 lists of elements.
+     * When an element is dragged on another element, the dragging element switches with the one that triggered
+     * the dragEnter event. It is possible to drag elements from the first row which is the list of attributes.
+     * In this case the element is not deleted from the row, however it is not possible to drag the same element
+     * twice in the other rows.
+     * 
+     */
     handleDragEnterAttrs(e, params){
         const dragging = this.state.elementDragging
         //console.log(params)
@@ -241,12 +293,20 @@ export default class NewSubscriptionPage extends React.Component{
        
         /* if (!this.state[newName].includes(this.state[oldName][dragging.entIdx])){} */
 
-        
-        
-
-
     }
 
+
+    /**
+     * 
+     * @param {*} e onDragEnter event that triggers the function
+     * @param {int, int} params Group index and Item index of the element in which the dragging element is dragged on
+     * @returns 
+     * This function manages the dragging logic of Stage 1 which has 2 lists of elements.
+     * When an element is dragged on another element, the dragging element switches with the one that triggered
+     * the dragEnter event.
+     * Every time a new entity joins the selected entity list, the state of the stage
+     * is evaluated and the list of possible selected attributes is updated
+     */
     async handleDragEnterEnts(e, params){
         const dragging = this.state.elementDragging
         //console.log(params)
@@ -281,12 +341,21 @@ export default class NewSubscriptionPage extends React.Component{
     }
 
 
-
+    /**
+     * 
+     * @param {Event} e onDragEnd event that triggers the function
+     * @param {*} params unused parametersù
+     * This function resets the dragging element to null
+     */
     handleDragEnd(e, params){
         this.setState({elementDragging:null})
     }
 
 
+    /**
+     * This function checks for selected Entities and then builds the attribute
+     * list by computing the union of all entities's attributes
+     */
     setAttrList(){
         const entlist = this.state.selectedEnts
         const attrlist = entlist.map((ent) => {
@@ -301,12 +370,16 @@ export default class NewSubscriptionPage extends React.Component{
  
     }
 
-
+    /**
+     * @returns 
+     * Function to manage logic when incrementing stage.
+     * If stage is greater or equal to 5, do nothing
+     * If stage is 3, then it creates the request payload
+     * If stage is less than 4, increment by 1 and evaluate the state
+     */
     async incrementStage(){
-        //if (stage > 4) return (<Navigate to="/subscriptions" replace/>) -> Navigation after evaluation
-        //TODO: SubmitPayload evaluation. incrementStage not for Submit button.
         const stage = this.state.stage
-        if (stage >= 4) return
+        if (stage >= 5) return
 
         if (stage == 3){
             this.createPayload()
@@ -318,7 +391,15 @@ export default class NewSubscriptionPage extends React.Component{
         
     }
 
-
+    
+  
+    /**
+     * @returns 
+     * Function to manage logic when decrementing stage.
+     * If stage is less or equal to 1, do nothing
+     * If stage is 2, then it empties the selected and condition attribute lists
+     * If stage is greater than 1, decrement by 1 and evaluate the state
+     */
     async decrementStage(){
         const stage = this.state.stage
         if (stage <= 1) return 
@@ -334,6 +415,18 @@ export default class NewSubscriptionPage extends React.Component{
     }
 
 
+    /**
+     * 
+     * @returns
+     * Function that evaluates the state of the state to decide if it
+     * is possible to proceed to the next stage. It is default to true and it's switched to false if
+     * an error is detected.
+     * The logic is the following:
+     * - Stage 1: At least one entity is selected
+     * - Stage 2: Always yes (since if no attribute is selected, then all attributes are selected)
+     * - Stage 3: There must be at least one valid URL to send notifications to
+     * - Stage 4: The stringified payload must be correctly converted to a valid JSON
+     */
     evaluateNext(){
         const stage = this.state.stage
         switch(stage) {
@@ -354,7 +447,7 @@ export default class NewSubscriptionPage extends React.Component{
                     return
                 }
                 break
-                //Check for some other stuff
+                // TODO Check for some other stuff
             case 4:
                 try{
                     const payload = JSON.parse(this.state.stringifiedPayload)
@@ -371,6 +464,10 @@ export default class NewSubscriptionPage extends React.Component{
         this.setState({nextOk : true})
     }
 
+    /**
+     * Function to get all entities from the context broker from the currently
+     * selected service
+     */
     async fetchEntities(){
         try{
             const url = "http://" + this.props.baseurl + "entities/"
@@ -390,6 +487,13 @@ export default class NewSubscriptionPage extends React.Component{
         }
     }
 
+    /**
+     * 
+     * @param {int} stage 
+     * @returns {JSX.Element}
+     * This function dynamically modifies the body of the page,
+     * rendering different bodies for each stage.
+     */
     renderSwitch(stage) {
         switch(stage) {
             case 1:
@@ -425,6 +529,13 @@ export default class NewSubscriptionPage extends React.Component{
         }
       }
     
+    /**
+     * 
+     * @param {*Object} prevProps 
+     * @param {*Object} prevState 
+     * Function that, on update of "selectedEnts" state, evaluates the current
+     * stage state and sets the proper Attribute list
+     */
     componentDidUpdate(prevProps, prevState){
         if (this.state.selectedEnts !== prevState.selectedEnts){
             console.log("Updating")
@@ -433,12 +544,20 @@ export default class NewSubscriptionPage extends React.Component{
         }
     }
 
+    /**
+     * Function that calls the fetchEntities function
+     * when component mounts
+     */
     async componentDidMount(){
         await this.fetchEntities()
         this.evaluateNext()
 
     }
 
+    /**
+     * Function that resets the state of the component
+     * to default values
+     */
     componentWillUnmount(){
         this.state = {
             stage : 1,
@@ -454,6 +573,16 @@ export default class NewSubscriptionPage extends React.Component{
         }
     }
 
+    /**
+     * 
+     * @returns {JSX.Element}
+     * This function renders the page. It has also some logic
+     * for different rendering based on the number of entities from the service
+     * Moreover, redirects the user to SubscriptionPage component when the subscription is
+     * correctly created in CB (stage > 4).
+     * TODO: bring rendering of Navigate to RenderSwitch() function?
+     * 
+     */
     render(){
         const entlist = this.state.entlist
         const stage = this.state.stage
@@ -477,49 +606,44 @@ export default class NewSubscriptionPage extends React.Component{
                 />
             </div>
         )
-        
-        //return(<button onClick={this.openPage}>Click</button>)
     }
 }
 
 
 
 
-class PageFooter extends React.Component{
-    constructor(props){
-        super(props)
-        /**Props:
-         * incrementStage (function) -> next_btn
-         * decrementStage (function) -> prev_btn
-         * this.handleNewSubscription
-         * stage
-         * nextOk
-         * payloadOk
-         */
-        
-    }
+function PageFooter(props) {
+    /**
+     * 
+     * @param {boolean} nextOk Flag to evaluate activation of next button
+     * @param {int} stage Stage of the body of the NewSubscription page 
+     * @param {Function} incrementStage Function from parent (NewSubscription) to increment stage
+     * @param {Function} decrementStage Function from parent (NewSubscription) to decrement stage
+     * 
+     * This component renders the NewSubscription page footer, implementing
+     * the navigation logic.
+     */
+    
+    const btnNext = <button 
+                        disabled={ props.nextOk? false:true} 
+                        className={props.nextOk? "activebtn": "disabledbtn"} 
+                        onClick={props.incrementStage}
+                    > Next {">"}</button>
+    const btnPrev = <button className="activebtn" onClick={props.decrementStage}> {"<"} Previous </button>
+    const btnGoBack = <Link to="/subscriptions" style={{margin: 'auto'}}> <button className="activebtn">{"<"} Back to list</button></Link>
 
-    render(){
-        const btnNext = <button 
-                            disabled={ this.props.nextOk? false:true} 
-                            className={this.props.nextOk? "activebtn": "disabledbtn"} 
-                            onClick={this.props.incrementStage}
-                        > Next {">"}</button>
-        const btnPrev = <button className="activebtn" onClick={this.props.decrementStage}> {"<"} Previous </button>
-        const btnGoBack = <Link to="/subscriptions" style={{margin: 'auto'}}> <button className="activebtn">{"<"} Back to list</button></Link>
-
-        const btnSubscribe = <button 
-                                disabled={ this.props.nextOk? false:true} 
-                                className={this.props.nextOk? "activebtn": "disabledbtn"}
-                                onClick ={this.props.handleNewSubscription}
-                            > Subscribe</button>
-        
-        return(
-            <div className="newSubFooter">
-                {this.props.stage == 1? btnGoBack : btnPrev}
-                {this.props.stage == 4? btnSubscribe : btnNext}
-            </div>
-        )
-    }
+    const btnSubscribe = <button 
+                            disabled={ props.nextOk? false:true} 
+                            className={props.nextOk? "activebtn": "disabledbtn"}
+                            onClick ={props.handleNewSubscription}
+                        > Subscribe</button>
+    
+    return(
+        <div className="newSubFooter">
+            {props.stage == 1? btnGoBack : btnPrev}
+            {props.stage == 4? btnSubscribe : btnNext}
+        </div>
+    )
+    
 }
 

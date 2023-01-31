@@ -2,17 +2,19 @@ import React from "react";
 import SubscriptionDetail from "./SubscriptionDetail";
 import SubscriptionList from "./SubscriptionList";
 import "./SubscriptionPage.css";
+import CBService from "../Models/CBService.ts";
 
 
 export default class SubscriptionPage extends React.Component{
 
+    /**
+     * 
+     * @param {string} baseurl The complete root URL of the context broker, with version
+     * @param {CBService} service The selected service from Home component
+     */
     constructor(props){
         super(props)
-        /** Props:
-         * baseurl
-         * service
-         * onServiceSelection
-         */
+    
         this.state = {
             sublist : [],
             selected: null,
@@ -25,6 +27,13 @@ export default class SubscriptionPage extends React.Component{
         this.deleteSub = this.deleteSub.bind(this)
     }
 
+
+    /**
+     * 
+     * @param {string} id subscription id 
+     * @param {Event} e onClick event that triggers the deletion
+     * Function that call the deleteById API from CB to delete a subscription
+     */
     async deleteSub(id, e){
         const url = "http://" + this.props.baseurl + "subscriptions/" + id
     
@@ -55,12 +64,19 @@ export default class SubscriptionPage extends React.Component{
         }
     }
 
-
+    /**
+     * Function that refresh subscriptions every 2 seconds, calling
+     * the refreshAll() function
+     */
     componentDidMount(){
         this.fetchSubs()
         this.refreshTimer = setInterval(() => this.refreshAll(), 2000)
     }
 
+    /**
+     * Function to clear the timer set on the componentDidMount function
+     * when component is de-rendered
+     */
     componentWillUnmount(){
         this.setState({
             searched: "",
@@ -69,16 +85,24 @@ export default class SubscriptionPage extends React.Component{
         clearInterval(this.refreshTimer)
     }
 
+    /**
+     * 
+     * @param {string} id subscription id
+     * This function saves the currently selected subscription
+     * to show further details
+     */
     handleSelectedSubscriptionChange(id){
         const subs = this.state.sublist
         const selected = subs.filter( sub=> sub.id === id)[0]
         this.setState({
             selected : selected
         }) 
-        //console.log(selected)
-
     }
 
+    /**
+     * Restores the currently selected entity status to show
+     * changes in its statistics
+     */
     refreshAll(){
         this.fetchSubs()
         const subs = this.state.sublist
@@ -91,6 +115,10 @@ export default class SubscriptionPage extends React.Component{
         }
     }
 
+    /**
+     * Function that calls the getAll api for subscriptions from CB
+     * in the currently selected service
+     */
     async fetchSubs(){
         try{
             const url = "http://" + this.props.baseurl + "subscriptions/"
@@ -111,6 +139,14 @@ export default class SubscriptionPage extends React.Component{
     }
 
 
+    /**
+     * 
+     * @returns {JSX.Element} 
+     * Renders the whole subscription page with a table of subscriptions with a searchbar
+     * and an optional field containing statistics for a selected subscription.
+     * It is also possible, from this field, to delete the subscription.
+     * TODO: add a method also to modify current subscriptions
+     */
     render(){
         const subs = this.state.sublist
         const selected = this.state.selected
